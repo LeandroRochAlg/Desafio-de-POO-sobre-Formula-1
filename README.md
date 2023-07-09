@@ -17,7 +17,7 @@ O sistema será dividido em três partes principais:
 O sistema deverá fornecer as seguintes funcionalidades:
 
 1. Cadastro de pilotos: Permitir o cadastro de pilotos com nome, país, número e equipe.
-2. Cadastro de equipes: Permitir o cadastro de equipes com nome e país.
+2. Cadastro de equipes: Permitir o cadastro de equipes com nome, país e chefe de equipe.
 3. Cadastro de corridas: Permitir o cadastro de corridas com data, local e número de voltas.
 4. Registro de resultados: Permitir o registro dos resultados de uma corrida, incluindo a posição de chegada de cada piloto.
 5. Consulta de resultados: Permitir a consulta dos resultados de uma corrida específica, exibindo a posição de chegada de cada piloto.
