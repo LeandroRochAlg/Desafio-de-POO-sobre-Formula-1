@@ -18,10 +18,14 @@ class Competidor(ABC):  #Classe abstrata para equipe e piloto
         pass
 
 class Equipe(Competidor):
-    def __init__(self, nome, pais, chefeEquipe, Motor):
+    def __init__(self, nome, pais, chefeEquipe, Motor = None):
         super().__init__(nome, pais)
         self.__chefeEquipe = chefeEquipe
-        self.__Motor = Motor    #Motor é um objeto da classe Equipe, pode ser ela mesma se a equipe fabrica os próprios motores
+
+        if Motor == None:   #Motor é um objeto da classe Equipe, pode ser ela mesma se a equipe fabrica os próprios motores
+            self.__Motor = self
+        else:
+            self.__Motor = Motor
 
     @property
     def chefeEquipe(self):
@@ -32,7 +36,7 @@ class Equipe(Competidor):
         return self.__Motor
     
     def __str__(self):
-        return f"Nome: {self.nome}\nPaís: {self.país}\nChefe de equipe: {self.chefeEquipe}\nMotor: {self.Motor.nome}"
+        return f"Nome: {self.__nome}\nPaís: {self.__pais}\nChefe de equipe: {self.__chefeEquipe}\nMotor: {self.__Motor.nome}"
     
 class Piloto(Competidor):
     def __init__(self, nome, pais, numero, Equipe, pontos):
@@ -46,7 +50,7 @@ class Piloto(Competidor):
         return self.__numero
 
     @property
-    def equipe(self):
+    def Equipe(self):
         return self.__Equipe
     
     @property
@@ -54,4 +58,4 @@ class Piloto(Competidor):
         return self.__pontos
     
     def __str__(self):
-        return f"Nome: {self.nome}\nPaís: {self.país}\nEquipe: {self.Equipe.nome}\nPontos: {self.pontos}"
+        return f"Nome: {self.__nome}\nPaís: {self.__pais}\nEquipe: {self.__Equipe.nome}\nPontos: {self.__pontos}"
