@@ -136,7 +136,7 @@ class LimiteCadastraEquipe(tk.Toplevel):
         self.inputChefeEquipe = tk.Entry(self.frameChefeEquipe, width=20)
 
         self.escolhaMotor = tk.StringVar()
-        self.comboMotor = ttk.Combobox(self.frameMotor, width=17, textvariable=self.escolhaMotor)
+        self.comboMotor = ttk.Combobox(self.frameMotor, width=17, textvariable=self.escolhaMotor, values=fabricaMotores)
 
         self.inputNome.pack(side="left")
         self.inputPais.pack(side="left")
@@ -157,3 +157,71 @@ class LimiteCadastraEquipe(tk.Toplevel):
 
     def mostraJanela(self, titulo, msg):
         messagebox.showinfo(titulo, msg)
+
+class LimiteMostraEquipes(tk.Toplevel):
+    def __init__(self, equipes):
+        self.janela = tk.Tk()
+        self.janela.title("Equipes")
+
+        self.frameTabela = tk.Frame(self.janela)
+        self.frameTabela.pack()
+
+        #Cria a tabela
+        self.tabela = ttk.Treeview(self.frameTabela, columns=('pais', 'chefeEquipe', 'motor'), show='headings')
+        self.tabela.column('pais', minwidth=0, width=100)
+        self.tabela.column('chefeEquipe', minwidth=0, width=100)
+        self.tabela.column('motor', minwidth=0, width=100)
+
+        self.tabela.heading('pais', text='País')
+        self.tabela.heading('chefeEquipe', text='Chefe de equipe')
+        self.tabela.heading('motor', text='Motor')
+
+        self.tabela.pack()
+
+        #Adiciona os dados na tabela
+        for equipe in equipes:
+            self.tabela.insert('', 'end', values=(equipe.nome, equipe.pais, equipe.chefeEquipe, equipe.Motor.nome))
+
+class CtrlEquipe:
+    def __init__(self, controlePrincipal):
+        self.ctrlPrincipal = controlePrincipal
+        self.listaEquipes = []
+        self.listaMotores = []
+
+        if not os.path.isfile("equipes.pickle"):
+            self.listaEquipes = []
+        else:
+            with open("equipes.pickle", "rb") as f:
+                self.listaEquipes = pickle.load(f)
+
+        if not os.path.isfile("motores.pickle"):
+            self.listaMotores = []
+        else:
+            with open("motores.pickle", "rb") as f:
+                self.listaMotores = pickle.load(f)
+
+    def cadastrarEquipe(self):
+        self.listaMotores = ['Ferrari', 'Mercedes', 'Red Bull', 'Alpine']
+        self.limiteCadastra = LimiteCadastraEquipe(self, self.listaMotores)
+
+class CtrlPiloto:
+    def __init__(self, controlePrincipal):
+        self.ctrlPrincipal = controlePrincipal
+        self.listaPilotos = []
+
+        if not os.path.isfile("pilotos.pickle"):
+            self.listaPilotos = []
+        else:
+            with open("pilotos.pickle", "rb") as f:
+                self.listaPilotos = pickle.load(f)
+
+class CtrlPista:
+    def __init__(self, controlePrincipal):
+        self.ctrlPrincipal = controlePrincipal
+        self.listaPistas = []
+
+        if not os.path.isfile("pistas.pickle"):
+            self.listaPistas = []
+        else:
+            with open("pistas.pickle", "rb") as f:
+                self.listaPistas = pickle.load(f)

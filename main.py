@@ -6,7 +6,7 @@ class LimitePrincipal():
     def __init__(self, root, controle):
         self.controle = controle
         self.root = root
-        self.root.geometry('500x300')
+        self.root.geometry('300x300')
         self.root.title('Resultados da Formula 1')
 
         self.menubar = tk.Menu(self.root)   #Cria a barra de menus

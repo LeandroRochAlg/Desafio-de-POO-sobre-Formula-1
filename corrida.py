@@ -81,3 +81,8 @@ class Corrida:
             ret += f"\n{i+1}º - {self.__resultados[i].Piloto.nome}"
 
         return ret
+    
+class CtrlCorrida:
+    def __init__(self, controlePrincipal):
+        self.ctrlPrincipal = controlePrincipal
+        self.listaCorridas = []
