@@ -1,5 +1,7 @@
 import tkinter as tk
-import competidor as cp
+import equipe as eq
+import piloto as plt
+import pista as pst
 import corrida as cr
 
 class LimitePrincipal():
@@ -43,9 +45,9 @@ class ControlePrincipal():
     def __init__(self):
         self.root = tk.Tk()
 
-        self.ctrlEquipe = cp.CtrlEquipe(self)
-        self.ctrlPiloto = cp.CtrlPiloto(self)
-        self.ctrlPista = cp.CtrlPista(self)
+        self.ctrlEquipe = eq.CtrlEquipe(self)
+        self.ctrlPiloto = plt.CtrlPiloto(self)
+        self.ctrlPista = pst.CtrlPista(self)
         self.ctrlCorrida = cr.CtrlCorrida(self)
 
         self.limite = LimitePrincipal(self.root, self)  #Passa a janela principal e o controle para a classe LimitePrincipal

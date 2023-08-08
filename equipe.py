@@ -103,25 +103,3 @@ class CtrlEquipe:
     def cadastrarEquipe(self):
         self.listaMotores = ['Ferrari', 'Mercedes', 'Red Bull', 'Alpine']
         self.limiteCadastra = LimiteCadastraEquipe(self, self.listaMotores)
-
-class CtrlPiloto:
-    def __init__(self, controlePrincipal):
-        self.ctrlPrincipal = controlePrincipal
-        self.listaPilotos = []
-
-        if not os.path.isfile("pilotos.pickle"):
-            self.listaPilotos = []
-        else:
-            with open("pilotos.pickle", "rb") as f:
-                self.listaPilotos = pickle.load(f)
-
-class CtrlPista:
-    def __init__(self, controlePrincipal):
-        self.ctrlPrincipal = controlePrincipal
-        self.listaPistas = []
-
-        if not os.path.isfile("pistas.pickle"):
-            self.listaPistas = []
-        else:
-            with open("pistas.pickle", "rb") as f:
-                self.listaPistas = pickle.load(f)
