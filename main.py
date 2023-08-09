@@ -9,8 +9,7 @@ class LimitePrincipal():
         self.controle = controle
         self.root = root
         self.root.geometry('300x300')
-        self.root.title('Resultados da Formula 1')
-
+    
         self.menubar = tk.Menu(self.root)   #Cria a barra de menus
 
         #Cria os menus
@@ -18,6 +17,7 @@ class LimitePrincipal():
         self.pilotoMenu = tk.Menu(self.menubar)
         self.pistaMenu = tk.Menu(self.menubar)
         self.corridaMenu = tk.Menu(self.menubar)
+        self.salvaMenu = tk.Menu(self.menubar)
 
         #Adiciona os botões dos menus
         self.equipeMenu.add_command(label="Cadastrar", command=self.controle.cadastrarEquipe)
@@ -32,11 +32,14 @@ class LimitePrincipal():
         self.corridaMenu.add_command(label="Cadastrar", command=self.controle.cadastrarCorrida)
         self.corridaMenu.add_command(label="Pesquisar", command=self.controle.listarCorridas)
 
+        self.salvaMenu.add_command(label='Salvar e sair', command=self.controle.salvaJogos)
+
         #Adiciona os menus a barra de menus
         self.menubar.add_cascade(label="Equipe", menu=self.equipeMenu)
         self.menubar.add_cascade(label="Piloto", menu=self.pilotoMenu)
         self.menubar.add_cascade(label="Pista", menu=self.pistaMenu)
         self.menubar.add_cascade(label="Corrida", menu=self.corridaMenu)
+        self.menubar.add_cascade(label="Sair", menu=self.salvaMenu)
 
         #Adiciona a barra de menus a janela principal
         self.root.config(menu=self.menubar)
@@ -78,6 +81,13 @@ class ControlePrincipal():
 
     def listarCorridas(self):
         self.ctrlCorrida.listarCorridas()
+
+    def salvaJogos(self):
+        self.ctrlEquipe.salvaEquipes()
+        '''self.ctrlPiloto.salvaPilotos()
+        self.ctrlPista.salvaPistas()
+        self.ctrlCorrida.salvaCorridas()'''
+        self.root.destroy()
 
 if __name__ == '__main__':
     c = ControlePrincipal()
