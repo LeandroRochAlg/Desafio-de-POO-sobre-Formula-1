@@ -101,10 +101,10 @@ class CtrlEquipe:
     def __init__(self, controlePrincipal):
         self.ctrlPrincipal = controlePrincipal
 
-        if not os.path.isfile("equipes.pickle"):
+        if not os.path.isfile("Cadastros/equipes.pickle"):
             self.listaEquipes = []
         else:
-            with open("equipes.pickle", "rb") as f:
+            with open("Cadastros/equipes.pickle", "rb") as f:
                 self.listaEquipes = pickle.load(f)
 
     def cadastrarEquipe(self):
@@ -157,5 +157,5 @@ class CtrlEquipe:
 
     def salvaEquipes(self):
         if len(self.listaEquipes) != 0:
-            with open("equipes.pickle", "wb") as f:
+            with open("Cadastros/equipes.pickle", "wb") as f:
                 pickle.dump(self.listaEquipes, f)
