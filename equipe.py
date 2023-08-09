@@ -72,9 +72,8 @@ class LimiteCadastraEquipe(tk.Toplevel):
     def mostraJanela(self, titulo, msg):
         messagebox.showinfo(titulo, msg)
 
-class LimiteMostraEquipes(tk.Toplevel):
+class LimiteMostraEquipes():
     def __init__(self, equipes):
-        tk.Toplevel.__init__(self)
         self.janela = tk.Tk()
         self.janela.title("Equipes")
 
@@ -82,11 +81,13 @@ class LimiteMostraEquipes(tk.Toplevel):
         self.frameTabela.pack()
 
         #Cria a tabela
-        self.tabela = ttk.Treeview(self.frameTabela, columns=('pais', 'chefeEquipe', 'motor'), show='headings')
+        self.tabela = ttk.Treeview(self.frameTabela, columns=('nome', 'pais', 'chefeEquipe', 'motor'), show='headings')
+        self.tabela.column('nome', minwidth=0, width=100)
         self.tabela.column('pais', minwidth=0, width=100)
         self.tabela.column('chefeEquipe', minwidth=0, width=100)
         self.tabela.column('motor', minwidth=0, width=100)
 
+        self.tabela.heading('nome', text='Nome')
         self.tabela.heading('pais', text='País')
         self.tabela.heading('chefeEquipe', text='Chefe de equipe')
         self.tabela.heading('motor', text='Motor')
@@ -154,6 +155,22 @@ class CtrlEquipe:
 
     def fechaHandlerEquipe(self, event):
         self.limiteCadastra.destroy()
+
+    def listarEquipes(self):
+        if len(self.listaEquipes) == 0:
+            self.limiteAviso = tk.Toplevel()
+            self.limiteAviso.geometry('200x100')
+            self.limiteAviso.title("Aviso")
+            self.limiteAvisoLabel = tk.Label(self.limiteAviso, text="Não há equipes cadastradas")
+            self.limiteAvisoLabel.pack()
+            self.limiteAvisoButton = tk.Button(self.limiteAviso, text="Ok", font=('negrito', 9))
+            self.limiteAvisoButton.pack()
+            self.limiteAvisoButton.bind("<Button>", self.fechaHandlerAviso)
+        else:
+            self.limiteMostra = LimiteMostraEquipes(self.listaEquipes)
+
+    def fechaHandlerAviso(self, event):
+        self.limiteAviso.destroy()
 
     def salvaEquipes(self):
         if len(self.listaEquipes) != 0:
