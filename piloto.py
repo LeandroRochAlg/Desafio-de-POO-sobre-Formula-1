@@ -63,6 +63,30 @@ class LimiteCadastroPiloto(tk.Toplevel):
     def mostraJanela(self, titulo, msg):
         messagebox.showinfo(titulo, msg)
 
+class LimiteMostraPilotos(tk.Toplevel):    #Tela com uma caixa de texto com as informações de todos os pilotos cadastrados
+    def __init__(self, controle, pilotos):
+        tk.Toplevel.__init__(self)
+        self.geometry('600x600')
+        self.title("Lista de pilotos cadastrados")
+        self.controle = controle
+
+        self.framePilotos = tk.Frame(self)
+        self.frameButton = tk.Frame(self)
+
+        self.framePilotos.pack()
+        self.frameButton.pack()
+
+        self.labelPilotos = tk.Label(self.framePilotos, text="Pilotos cadastrados")
+        self.labelPilotos.pack(side="left")
+
+        self.textPilotos = tk.Text(self.framePilotos, height=30, width=50)
+        self.textPilotos.pack(side="left")
+        self.textPilotos.insert(tk.END, pilotos)
+
+        self.buttonFecha = tk.Button(self.frameButton, text="Concluído", font=('negrito', 9))
+        self.buttonFecha.pack(side="left")
+        self.buttonFecha.bind("<Button>", controle.fechaListaHandler)
+
 class CtrlPiloto:
     def __init__(self, controlePrincipal):
         self.ctrlPrincipal = controlePrincipal
@@ -92,7 +116,7 @@ class CtrlPiloto:
                     if e.nome == equipe:
                         Equipe = e
 
-                self.listaPilotos.append(model.Piloto(nome, pais, numero, Equipe))
+                self.listaPilotos.append(model.Piloto(nome, pais, numero, Equipe, 0))
                 self.limiteCadastro.mostraJanela('Sucesso', 'Piloto cadastrado com sucesso!')
                 self.limiteCadastro.destroy()
             except ValueError as error:
@@ -107,6 +131,24 @@ class CtrlPiloto:
 
     def fechaHandler(self, event):
         self.limiteCadastro.destroy()
+
+    def getPiloto(self, nome):
+        pilotoRet = None
+        for p in self.listaPilotos:
+            if p.nome == nome:
+                pilotoRet = p
+        return pilotoRet
+
+    def listarPilotos(self):
+        pilotos = ''
+
+        for piloto in self.listaPilotos:
+            pilotos += str(piloto) + '\n\n'    # Adiciona os dados do piloto na string usando o método __str__
+
+        self.limiteLista = LimiteMostraPilotos(self, pilotos)
+
+    def fechaListaHandler(self, event):
+        self.limiteLista.destroy()
 
     def salvaPilotos(self):
         if len(self.listaPilotos) != 0:
