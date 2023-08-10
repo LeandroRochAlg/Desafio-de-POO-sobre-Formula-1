@@ -176,3 +176,11 @@ class CtrlEquipe:
         if len(self.listaEquipes) != 0:
             with open("Cadastros/equipes.pickle", "wb") as f:
                 pickle.dump(self.listaEquipes, f)
+
+    def getNomesEquipes(self):  # Retorna uma lista com os nomes das equipes
+        nomes = []
+
+        for equipe in self.listaEquipes:
+            nomes.append(equipe.nome)
+
+        return nomes
