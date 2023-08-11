@@ -66,7 +66,7 @@ class LimiteCadastroPiloto(tk.Toplevel):
 class LimiteMostraPilotos(tk.Toplevel):    #Tela com uma caixa de texto com as informações de todos os pilotos cadastrados
     def __init__(self, controle, pilotos):
         tk.Toplevel.__init__(self)
-        self.geometry('600x600')
+        self.geometry('600x550')
         self.title("Lista de pilotos cadastrados")
         self.controle = controle
 

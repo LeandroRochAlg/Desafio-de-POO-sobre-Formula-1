@@ -104,7 +104,7 @@ class Pista:
         self.__nome = nome
         self.__pais = pais
         self.__cidade = cidade
-        self.__tamanho = tamanho
+        self.tamanho = tamanho
 
     @property
     def nome(self):
@@ -122,8 +122,17 @@ class Pista:
     def tamanho(self):
         return self.__tamanho
     
+    @tamanho.setter
+    def tamanho(self, tamanho):
+        if tamanho <= 3000 and self.__pais != 'Mônaco':  #Mônaco é exceção pois tem menos de 3000 m
+            raise ValueError("O tamanho da pista não pode ser menor que 3000 m")
+        elif tamanho >= 7000 and self.__nome != 'Spa-Francorchamps':    #Spa é exceção pois tem 7004 m
+            raise ValueError("O tamanho da pista não pode ser maior que 7000 m")
+        else:
+            self.__tamanho = tamanho
+    
     def __str__(self):
-        return f"Nome: {self.__nome}\nPaís: {self.__pais}\nCidade: {self.__cidade}\nTamanho: {self.__tamanho} km"
+        return f"Nome: {self.__nome}\nPaís: {self.__pais}\nCidade: {self.__cidade}\nTamanho: {self.__tamanho} m"
     
 class Resultado:
     def __init__(self, Piloto, posicao):

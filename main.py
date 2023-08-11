@@ -85,8 +85,8 @@ class ControlePrincipal():
     def salvaJogos(self):
         self.ctrlEquipe.salvaEquipes()
         self.ctrlPiloto.salvaPilotos()
-        '''self.ctrlPista.salvaPistas()
-        self.ctrlCorrida.salvaCorridas()'''
+        self.ctrlPista.salvaPistas()
+        '''self.ctrlCorrida.salvaCorridas()'''
         self.root.destroy()
 
 if __name__ == '__main__':
