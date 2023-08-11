@@ -150,14 +150,14 @@ class Resultado:
     def __str__(self):
         ret = f"Piloto: {self.__Piloto.nome}"
 
-        if self.__posicao == 0:
+        if self.__posicao == 1000:
             ret += f" - Não terminou a corrida"
-        elif self.__posicao == -1:
+        elif self.__posicao == 2000:
             ret += f" - Não largou"
-        elif self.__posicao == -2:
+        elif self.__posicao == 3000:
             ret += f" - Desclassificado"
         else:
-            ret += f" - Posição: P{self.__posicao}"
+            ret += f" - P{self.__posicao}"
 
         return ret
     
@@ -188,6 +188,12 @@ class Corrida:
         ret = f"Data: {self.__data}\nHora: {self.__hora}\nPista: {self.__Pista.nome}\nPaís: {self.__Pista.pais}\nCidade: {self.__Pista.cidade}\nTamanho: {self.__Pista.tamanho} km\n\nResultados:"
 
         for i in range(len(self.__resultados)):
-            ret += f"\n{i+1}º - {self.__resultados[i].Piloto.nome}"
+            for j in range(len(self.__resultados)):
+                if self.__resultados[i].posicao < self.__resultados[j].posicao: #Ordena os resultados
+                    aux = self.__resultados[i]
+                    self.__resultados[i] = self.__resultados[j]
+                    self.__resultados[j] = aux
+
+            ret += f"\n{i+1}º - {self.__resultados[i]}"
 
         return ret
