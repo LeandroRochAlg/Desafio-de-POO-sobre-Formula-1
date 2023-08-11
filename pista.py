@@ -60,6 +60,30 @@ class LimiteCadastraPista(tk.Toplevel):
     def mostraJanela(self, titulo, msg):
         messagebox.showinfo(titulo, msg)
 
+class LimiteMostraPistas(tk.Toplevel):
+    def __init__(self, controle, listaPistas):
+        tk.Toplevel.__init__(self)
+        self.geometry('600x550')
+        self.title("Pistas cadastradas")
+        self.controle = controle
+
+        self.framePistas = tk.Frame(self)
+        self.frameButton = tk.Frame(self)
+
+        self.framePistas.pack()
+        self.frameButton.pack()
+
+        self.labelPistas = tk.Label(self.framePistas, text="Pistas: ")
+        self.labelPistas.pack(side="left")
+
+        self.textPistas = tk.Text(self.framePistas, height=30, width=50, wrap=tk.WORD)
+        self.textPistas.pack(side="left")
+        self.textPistas.insert(tk.END, listaPistas)
+
+        self.buttonFecha = tk.Button(self.frameButton, text="Concluído", font=('negrito', 9))
+        self.buttonFecha.pack(side="left")
+        self.buttonFecha.bind("<Button>", controle.fechaListaHandler)
+
 class CtrlPista:
     def __init__(self, controlePrincipal):
         self.ctrlPrincipal = controlePrincipal
@@ -98,7 +122,15 @@ class CtrlPista:
         self.limiteCadastra.destroy()
 
     def listarPistas(self):
-        pass
+        pistas = ''
+
+        for pista in self.listaPistas:
+            pistas += str(pista) + '\n\n'
+
+        self.limiteLista = LimiteMostraPistas(self, pistas)
+
+    def fechaListaHandler(self, event):
+        self.limiteLista.destroy()
 
     def salvaPistas(self):
         if len(self.listaPistas) != 0:
