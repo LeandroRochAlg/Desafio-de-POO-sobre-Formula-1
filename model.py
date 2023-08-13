@@ -156,7 +156,7 @@ class Resultado:
         ret = f"Piloto: {self.__Piloto.nome}"
 
         if self.__posicao == 1000:
-            ret += f" - Não terminou a corrida"
+            ret += f" - Não terminou"
         elif self.__posicao == 2000:
             ret += f" - Não largou"
         elif self.__posicao == 3000:
@@ -170,38 +170,76 @@ class Resultado:
         return ret
     
 class Corrida:
-    def __init__(self, Pista, data, hora, resultados):
-        self.__Pista = Pista
+    def __init__(self, data, nVoltas, resultados):
         self.__data = data
-        self.__hora = hora
+        self.__nVoltas = nVoltas
         self.__resultados = resultados
-
-    @property
-    def Pista(self):
-        return self.__Pista
     
     @property
     def data(self):
         return self.__data
     
     @property
-    def hora(self):
-        return self.__hora
+    def nVoltas(self):
+        return self.__nVoltas
     
     @property
     def resultados(self):
         return self.__resultados
     
-    def __str__(self):
-        ret = f"Data: {self.__data}\nHora: {self.__hora}\nPista: {self.__Pista.nome}\nPaís: {self.__Pista.pais}\nCidade: {self.__Pista.cidade}\nTamanho: {self.__Pista.tamanho} km\n\nResultados:"
+    @resultados.setter
+    def resultados(self, resultados):
+        self.__resultados = resultados
 
+    def adicionaResultado(self, Resultado):
+        self.__resultados.append(Resultado)
+    
+    def __str__(self):
+        ret = f"Data: {self.__data}\nResultados:"
+
+        #Ordena os resultados pela posição
         for i in range(len(self.__resultados)):
             for j in range(len(self.__resultados)):
-                if self.__resultados[i].posicao < self.__resultados[j].posicao: #Ordena os resultados
+                if self.__resultados[i].posicao < self.__resultados[j].posicao:
                     aux = self.__resultados[i]
                     self.__resultados[i] = self.__resultados[j]
                     self.__resultados[j] = aux
 
             ret += f"\n{i+1}º - {self.__resultados[i]}"
+
+        return ret
+    
+class GP:
+    def __init__(self, nome, Pista, Corrida, Sprint = None):
+        self.__nome = nome
+        self.__Pista = Pista
+        self.__Corrida = Corrida
+        self.__Sprint = Sprint
+
+    @property
+    def nome(self):
+        return self.__nome
+    
+    @property
+    def Pista(self):
+        return self.__Pista
+
+    @property
+    def Corrida(self):
+        return self.__Corrida
+    
+    @property
+    def Sprint(self):
+        return self.__Sprint
+    
+    def __str__(self):
+        ret = f"Nome: {self.__nome}\nPista: {self.__Pista.nome}\n"
+
+        if self.__Sprint != None:
+            ret += f"\nSPRINT"
+            ret += f"{self.__Sprint}"
+
+        ret += f"\nCORRIDA"
+        ret += f"{self.__Corrida}"
 
         return ret

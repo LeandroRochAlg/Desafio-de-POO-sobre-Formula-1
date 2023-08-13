@@ -1,5 +1,5 @@
 import tkinter as tk
-from Menu import equipe, piloto, pista, corrida
+from Menu import GP, equipe, piloto, pista
 
 class LimitePrincipal():
     def __init__(self, root, controle):
@@ -13,7 +13,7 @@ class LimitePrincipal():
         self.equipeMenu = tk.Menu(self.menubar)
         self.pilotoMenu = tk.Menu(self.menubar)
         self.pistaMenu = tk.Menu(self.menubar)
-        self.corridaMenu = tk.Menu(self.menubar)
+        self.GpMenu = tk.Menu(self.menubar)
         self.salvaMenu = tk.Menu(self.menubar)
 
         #Adiciona os botões dos menus
@@ -26,16 +26,16 @@ class LimitePrincipal():
         self.pistaMenu.add_command(label="Cadastrar", command=self.controle.cadastrarPista)
         self.pistaMenu.add_command(label="Listar", command=self.controle.listarPistas)
 
-        self.corridaMenu.add_command(label="Cadastrar", command=self.controle.cadastrarCorrida)
-        self.corridaMenu.add_command(label="Pesquisar", command=self.controle.listarCorridas)
+        self.GpMenu.add_command(label="Cadastrar", command=self.controle.cadastrarGP)
+        self.GpMenu.add_command(label="Buscar", command=self.controle.consultarGP)
 
-        self.salvaMenu.add_command(label='Salvar e sair', command=self.controle.salvaJogos)
+        self.salvaMenu.add_command(label='Salvar e sair', command=self.controle.salva)
 
         #Adiciona os menus a barra de menus
         self.menubar.add_cascade(label="Equipe", menu=self.equipeMenu)
         self.menubar.add_cascade(label="Piloto", menu=self.pilotoMenu)
         self.menubar.add_cascade(label="Pista", menu=self.pistaMenu)
-        self.menubar.add_cascade(label="Corrida", menu=self.corridaMenu)
+        self.menubar.add_cascade(label="Grande Prêmio", menu=self.GpMenu)
         self.menubar.add_cascade(label="Sair", menu=self.salvaMenu)
 
         #Adiciona a barra de menus a janela principal
@@ -48,7 +48,7 @@ class ControlePrincipal():
         self.ctrlEquipe = equipe.CtrlEquipe(self)
         self.ctrlPiloto = piloto.CtrlPiloto(self)
         self.ctrlPista = pista.CtrlPista(self)
-        self.ctrlCorrida = corrida.CtrlCorrida(self)
+        self.ctrlGP = GP.CtrlGP(self)
 
         self.limite = LimitePrincipal(self.root, self)  #Passa a janela principal e o controle para a classe LimitePrincipal
 
@@ -74,16 +74,16 @@ class ControlePrincipal():
         self.ctrlPista.listarPistas()
 
     def cadastrarCorrida(self):
-        self.ctrlCorrida.cadastrarCorrida()
+        self.ctrlGP.cadastrarCorrida()
 
     def listarCorridas(self):
-        self.ctrlCorrida.listarCorridas()
+        self.ctrlGP.listarCorridas()
 
-    def salvaJogos(self):
+    def salva(self):
         self.ctrlEquipe.salvaEquipes()
         self.ctrlPiloto.salvaPilotos()
         self.ctrlPista.salvaPistas()
-        '''self.ctrlCorrida.salvaCorridas()'''
+        '''self.ctrlGP.salvaCorridas()'''
         self.root.destroy()
 
 if __name__ == '__main__':
