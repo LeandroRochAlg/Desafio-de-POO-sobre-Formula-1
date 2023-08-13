@@ -1,8 +1,5 @@
 import tkinter as tk
-import equipe as eq
-import piloto as plt
-import pista as pst
-import corrida as cr
+from Menu import equipe as eq, piloto as plt, pista as pst, corrida as cr
 
 class LimitePrincipal():
     def __init__(self, root, controle):
