@@ -105,7 +105,14 @@ class CtrlPiloto:
     def enterHandler(self, event):
         nome = self.limiteCadastro.inputNome.get()
         pais = self.limiteCadastro.inputPais.get()
-        numero = int(self.limiteCadastro.inputNumero.get())
+
+        #Exception para garantir que o número digitado seja inteiro
+        try:
+            numero = int(self.limiteCadastro.inputNumero.get())
+        except ValueError:
+            messagebox.showinfo('Alerta', 'Número inválido!')
+            return
+        
         equipe = self.limiteCadastro.escolhaEquipe.get()
 
         piloto = self.getPiloto(nome)   # Verifica se o piloto já está cadastrado

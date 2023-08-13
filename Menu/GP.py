@@ -26,6 +26,8 @@ class LimiteCriaGP(tk.Toplevel):
         self.inputGP.pack(side="left")
 
         # Combobox para escolher a pista
+        self.labelPista = tk.Label(self.framePista, text="Pista: ")
+        self.labelPista.pack(side="left")
         self.escolhaPista = tk.StringVar()
         self.comboPista = ttk.Combobox(self.framePista, width=27, textvariable=self.escolhaPista, values=pistas)
         self.comboPista.pack(side="left")
@@ -38,6 +40,10 @@ class LimiteCriaGP(tk.Toplevel):
         self.buttonCorrida = tk.Button(self.frameButton, text="Cadastrar Corrida", font=('negrito', 9))
         self.buttonCorrida.pack(side="left")
         self.buttonCorrida.bind("<Button>", controle.cadastrarCorrida)
+
+        self.buttonCancela = tk.Button(self.frameButton, text="Cancelar", font=('negrito', 9))
+        self.buttonCancela.pack(side="left")
+        self.buttonCancela.bind("<Button>", controle.cancelaHandler)
 
         self.buttonFecha = tk.Button(self.frameButton, text="Concluído", font=('negrito', 9))
         self.buttonFecha.pack(side="left")
@@ -56,3 +62,23 @@ class CtrlGP:
         else:
             with open("Cadastros/GPs.pickle", "rb") as f:
                 self.listaGPs = pickle.load(f)
+
+    def cadastrarGP(self):
+        pistas = []
+
+        for pista in self.ctrlPrincipal.ctrlPista.listaPistas:
+            pistas.append(pista.nome)
+
+        self.limiteGP = LimiteCriaGP(self, pistas)
+
+    def cadastrarSprint(self, event):
+        pass
+
+    def cadastrarCorrida(self, event):
+        pass
+
+    def concluiHandler(self, event):
+        pass
+
+    def consultarGP(self):
+        pass

@@ -73,17 +73,17 @@ class ControlePrincipal():
     def listarPistas(self):
         self.ctrlPista.listarPistas()
 
-    def cadastrarCorrida(self):
-        self.ctrlGP.cadastrarCorrida()
+    def cadastrarGP(self):
+        self.ctrlGP.cadastrarGP()
 
-    def listarCorridas(self):
-        self.ctrlGP.listarCorridas()
+    def consultarGP(self):
+        self.ctrlGP.consultarGP()
 
     def salva(self):
         self.ctrlEquipe.salvaEquipes()
         self.ctrlPiloto.salvaPilotos()
         self.ctrlPista.salvaPistas()
-        '''self.ctrlGP.salvaCorridas()'''
+        '''self.ctrlGP.salvaGPs()'''
         self.root.destroy()
 
 if __name__ == '__main__':

@@ -101,7 +101,12 @@ class CtrlPista:
         nome = self.limiteCadastra.inputNome.get()
         pais = self.limiteCadastra.inputPais.get()
         cidade = self.limiteCadastra.inputCidade.get()
-        extensao = int(self.limiteCadastra.inputExtensao.get())
+
+        # Verifica se a extensão é um número
+        try:
+            extensao = int(self.limiteCadastra.inputExtensao.get())
+        except ValueError:
+            self.limiteCadastra.mostraJanela('Erro', 'A extensão deve ser um número inteiro')
 
         try:
             pista = model.Pista(nome, pais, cidade, extensao)

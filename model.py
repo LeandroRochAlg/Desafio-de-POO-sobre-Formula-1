@@ -74,7 +74,7 @@ class Equipe(Competidor):
 class Piloto(Competidor):
     def __init__(self, nome, pais, numero, Equipe):
         super().__init__(nome, pais)
-        self.__numero = numero
+        self.numero = numero
         self.__Equipe = Equipe
 
     @property
@@ -85,9 +85,7 @@ class Piloto(Competidor):
     def numero(self, numero):
         if numero == "":
             raise ValueError("O número não pode ser vazio")
-        elif not numero.isdigit():  #Verifica se o número é um inteiro
-            raise ValueError("O número deve ser um inteiro")
-        elif int(numero) <= 0:
+        elif numero <= 0:
             raise ValueError("O número não pode ser negativo ou zero")
         else:
             self.__numero = numero
