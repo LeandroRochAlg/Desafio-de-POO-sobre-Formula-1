@@ -77,8 +77,16 @@ class CtrlGP:
     def cadastrarCorrida(self, event):
         pass
 
+    def cancelaHandler(self, event):
+        self.limiteGP.destroy()
+
     def concluiHandler(self, event):
         pass
 
     def consultarGP(self):
         pass
+
+    def salvaGPs(self):
+        if len(self.listaGPs) != 0:
+            with open("Cadastros/GPs.pickle", "wb") as f:
+                pickle.dump(self.listaGPs, f)

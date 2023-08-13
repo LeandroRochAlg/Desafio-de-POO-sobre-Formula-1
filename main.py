@@ -83,7 +83,7 @@ class ControlePrincipal():
         self.ctrlEquipe.salvaEquipes()
         self.ctrlPiloto.salvaPilotos()
         self.ctrlPista.salvaPistas()
-        '''self.ctrlGP.salvaGPs()'''
+        self.ctrlGP.salvaGPs()
         self.root.destroy()
 
 if __name__ == '__main__':
