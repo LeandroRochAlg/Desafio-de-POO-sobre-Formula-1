@@ -4,6 +4,7 @@ class Competidor(ABC):  #Classe abstrata para equipe e piloto
     def __init__(self, nome, pais):
         self.nome = nome
         self.pais = pais
+        self.pontos = 0
 
     @property
     def nome(self):
@@ -26,6 +27,17 @@ class Competidor(ABC):  #Classe abstrata para equipe e piloto
             raise ValueError("O país não pode ser vazio")
         else:
             self.__pais = pais
+
+    @property
+    def pontos(self):
+        return self.__pontos
+    
+    @pontos.setter
+    def pontos(self, pontos):
+        self.__pontos = pontos
+
+    def adicionaPontos(self, pontos):
+        self.__pontos += pontos
     
     @abstractmethod #Método abstrato para ser implementado nas classes filhas
     def __str__(self):  #Método para criar o retorno do print da classe
@@ -60,11 +72,10 @@ class Equipe(Competidor):
         return f"Nome: {self.__nome}\nPaís: {self.__pais}\nChefe de equipe: {self.__chefeEquipe}\nMotor: {self.__Motor.nome}"
     
 class Piloto(Competidor):
-    def __init__(self, nome, pais, numero, Equipe, pontos):
+    def __init__(self, nome, pais, numero, Equipe):
         super().__init__(nome, pais)
         self.__numero = numero
         self.__Equipe = Equipe
-        self.__pontos = pontos
 
     @property
     def numero(self):
@@ -84,17 +95,6 @@ class Piloto(Competidor):
     @property
     def Equipe(self):
         return self.__Equipe
-    
-    @property
-    def pontos(self):
-        return self.__pontos
-    
-    @pontos.setter
-    def pontos(self, pontos):
-        if pontos == "":
-            raise ValueError("Os pontos não podem ser vazios")
-        else:
-            self.__pontos = pontos
     
     def __str__(self):
         return f"Nome: {self.nome}\nPaís: {self.pais}\nEquipe: {self.__Equipe.nome}\nPontos: {self.__pontos}"
@@ -135,9 +135,10 @@ class Pista:
         return f"Nome: {self.__nome}\nPaís: {self.__pais}\nCidade: {self.__cidade}\nTamanho: {self.__tamanho} m"
     
 class Resultado:
-    def __init__(self, Piloto, posicao):
+    def __init__(self, Piloto, posicao, voltaRapida):
         self.__Piloto = Piloto
         self.__posicao = posicao
+        self.__voltaRapida = voltaRapida
 
     @property
     def Piloto(self):
@@ -146,6 +147,10 @@ class Resultado:
     @property
     def posicao(self):
         return self.__posicao
+    
+    @property
+    def voltaRapida(self):
+        return self.__voltaRapida
     
     def __str__(self):
         ret = f"Piloto: {self.__Piloto.nome}"
@@ -158,6 +163,9 @@ class Resultado:
             ret += f" - Desclassificado"
         else:
             ret += f" - P{self.__posicao}"
+
+        if self.__voltaRapida:
+            ret += " - Volta mais rápida"
 
         return ret
     

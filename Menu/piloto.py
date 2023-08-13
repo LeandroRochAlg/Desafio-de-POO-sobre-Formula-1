@@ -116,7 +116,7 @@ class CtrlPiloto:
                     if e.nome == equipe:
                         Equipe = e
 
-                self.listaPilotos.append(model.Piloto(nome, pais, numero, Equipe, 0))
+                self.listaPilotos.append(model.Piloto(nome, pais, numero, Equipe))
                 self.limiteCadastro.mostraJanela('Sucesso', 'Piloto cadastrado com sucesso!')
                 self.limiteCadastro.destroy()
             except ValueError as error:
