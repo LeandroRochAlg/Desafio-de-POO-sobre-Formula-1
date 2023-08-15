@@ -1,11 +1,11 @@
 import tkinter as tk
-from Menu import GP, equipe, piloto, pista
+from Menu import GP, equipe, piloto, pista, tabela
 
 class LimitePrincipal():
     def __init__(self, root, controle):
         self.controle = controle
         self.root = root
-        self.root.geometry('300x300')
+        self.root.geometry('350x300')
     
         self.menubar = tk.Menu(self.root)   #Cria a barra de menus
 
@@ -14,6 +14,7 @@ class LimitePrincipal():
         self.pilotoMenu = tk.Menu(self.menubar)
         self.pistaMenu = tk.Menu(self.menubar)
         self.GpMenu = tk.Menu(self.menubar)
+        self.tabelaMenu = tk.Menu(self.menubar)
         self.salvaMenu = tk.Menu(self.menubar)
 
         #Adiciona os botões dos menus
@@ -29,6 +30,9 @@ class LimitePrincipal():
         self.GpMenu.add_command(label="Cadastrar", command=self.controle.cadastrarGP)
         self.GpMenu.add_command(label="Buscar", command=self.controle.consultarGP)
 
+        self.tabelaMenu.add_command(label="Pilotos", command=self.controle.exibirTabelaPilotos)
+        self.tabelaMenu.add_command(label="Construtores", command=self.controle.exibirTabelaConstrutores)
+
         self.salvaMenu.add_command(label='Salvar e sair', command=self.controle.salva)
 
         #Adiciona os menus a barra de menus
@@ -36,6 +40,7 @@ class LimitePrincipal():
         self.menubar.add_cascade(label="Piloto", menu=self.pilotoMenu)
         self.menubar.add_cascade(label="Pista", menu=self.pistaMenu)
         self.menubar.add_cascade(label="Grande Prêmio", menu=self.GpMenu)
+        self.menubar.add_cascade(label="Tabelas", menu=self.tabelaMenu)
         self.menubar.add_cascade(label="Sair", menu=self.salvaMenu)
 
         #Adiciona a barra de menus a janela principal
@@ -49,6 +54,7 @@ class ControlePrincipal():
         self.ctrlPiloto = piloto.CtrlPiloto(self)
         self.ctrlPista = pista.CtrlPista(self)
         self.ctrlGP = GP.CtrlGP(self)
+        self.ctrlTabela = tabela.CtrlTabela(self)
 
         self.limite = LimitePrincipal(self.root, self)  #Passa a janela principal e o controle para a classe LimitePrincipal
 
@@ -78,6 +84,12 @@ class ControlePrincipal():
 
     def consultarGP(self):
         self.ctrlGP.consultarGP()
+
+    def exibirTabelaPilotos(self):
+        self.ctrlTabela.exibirTabelaPilotos()
+
+    def exibirTabelaConstrutores(self):
+        self.ctrlTabela.exibirTabelaConstrutores()
 
     def salva(self):
         self.ctrlEquipe.salvaEquipes()
