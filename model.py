@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+import datetime
 
 class Competidor(ABC):  #Classe abstrata para equipe e piloto
     def __init__(self, nome, pais):
@@ -208,9 +209,10 @@ class Corrida:
         return ret
     
 class GP:
-    def __init__(self, nome, Pista, Corrida, Sprint = None):
-        self.__nome = nome
+    def __init__(self, nome, Pista, dataInicio, Corrida = None, Sprint = None):
+        self.nome = nome
         self.__Pista = Pista
+        self.dataInicio = dataInicio
         self.__Corrida = Corrida
         self.__Sprint = Sprint
 
@@ -218,9 +220,24 @@ class GP:
     def nome(self):
         return self.__nome
     
+    @nome.setter
+    def nome(self, nome):
+        if nome == "":
+            raise ValueError("O nome não pode ser vazio")
+        else:
+            self.__nome = nome
+    
     @property
     def Pista(self):
         return self.__Pista
+    
+    @property
+    def dataInicio(self):
+        return self.__dataInicio
+    
+    @dataInicio.setter
+    def dataInicio(self, dataInicio):
+        self.__dataInicio = datetime.datetime.strptime(dataInicio, "%d/%m/%Y") #Converte a string para datetime
 
     @property
     def Corrida(self):
@@ -231,13 +248,16 @@ class GP:
         return self.__Sprint
     
     def __str__(self):
-        ret = f"Nome: {self.__nome}\nPista: {self.__Pista.nome}\n"
+        ret = f"Nome: {self.__nome}\nPista: {self.__Pista.nome}\nData de início: {self.__dataInicio.strftime('%d/%m/%Y')}\n"
 
         if self.__Sprint != None:   #Se tiver sprint, adiciona no retorno
             ret += f"\nSPRINT"
             ret += f"{self.__Sprint}"   #Chama o método __str__ da classe Corrida
 
-        ret += f"\nCORRIDA"
-        ret += f"{self.__Corrida}"
+        if self.__Corrida != None:
+            ret += f"\nCORRIDA"
+            ret += f"{self.__Corrida}"
+        else:
+            ret += "\nCorrida ainda não realizada"
 
         return ret
