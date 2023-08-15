@@ -233,9 +233,9 @@ class GP:
     def __str__(self):
         ret = f"Nome: {self.__nome}\nPista: {self.__Pista.nome}\n"
 
-        if self.__Sprint != None:
+        if self.__Sprint != None:   #Se tiver sprint, adiciona no retorno
             ret += f"\nSPRINT"
-            ret += f"{self.__Sprint}"
+            ret += f"{self.__Sprint}"   #Chama o método __str__ da classe Corrida
 
         ret += f"\nCORRIDA"
         ret += f"{self.__Corrida}"
