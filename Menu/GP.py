@@ -112,22 +112,49 @@ class LimiteCadastraSprint(tk.Toplevel):
 class LimiteCadastraCorrida(tk.Toplevel):
     def __init__(self, controle):
         tk.Toplevel.__init__(self)
-        self.geometry('400x400')
+        self.geometry('800x400')
         self.title("Registrar corrida")
         self.controle = controle
 
-        self.frameCorrida = tk.Frame(self)               #Frame para o nome do GP
+        self.framePiloto = tk.Frame(self)
         self.frameButton = tk.Frame(self)           #Frame para os botões
 
-        self.frameCorrida.pack()
+        self.framePiloto.pack()
         self.frameButton.pack()
 
-        self.labelCorrida = tk.Label(self.frameCorrida, text="Corrida: ")
-        self.labelCorrida.pack(side="left")
-        self.inputCorrida = tk.Entry(self.frameCorrida, width=30)
-        self.inputCorrida.pack(side="left")
+        self.labelPiloto = tk.Label(self.framePiloto, text="Número do piloto: ")
+        self.labelPiloto.pack(side="left")
+        self.inputPiloto = tk.Entry(self.framePiloto, width=5)
+        self.inputPiloto.pack(side="left")
+        self.labelPiloto = tk.Label(self.framePiloto, text="Posição: ")
+        self.labelPiloto.pack(side="left")
+        self.inputPiloto = tk.Entry(self.framePiloto, width=5)
+        self.inputPiloto.pack(side="left")
+
+        self.labelVoltaRapida = tk.Label(self.framePiloto, text="Volta mais rápida: ")
+        self.labelVoltaRapida.pack(side="left")
+        self.marcaVoltaRapida = tk.IntVar()
+        self.checkVoltaRapida = tk.Checkbutton(self.framePiloto, variable=self.marcaVoltaRapida)
+        self.checkVoltaRapida.pack(side="left")
+
+        self.labelAbandonou = tk.Label(self.framePiloto, text="Abandonou: ")
+        self.labelAbandonou.pack(side="left")
+        self.marcaAbandonou = tk.IntVar()
+        self.checkAbandonou = tk.Checkbutton(self.framePiloto, variable=self.marcaAbandonou)
+        self.checkAbandonou.pack(side="left")
+
+        self.labelDesclassificado = tk.Label(self.framePiloto, text="Desclassificado: ")
+        self.labelDesclassificado.pack(side="left")
+        self.marcaDesclassificado = tk.IntVar()
+        self.checkDesclassificado = tk.Checkbutton(self.framePiloto, variable=self.marcaDesclassificado)
+        self.checkDesclassificado.pack(side="left")
+
 
         # Botões
+        self.buttonPiloto = tk.Button(self.framePiloto, text="Cadastrar resultado do piloto", font=('negrito', 9))
+        self.buttonPiloto.pack(side="left")
+        self.buttonPiloto.bind("<Button>", controle.cadastrarPiloto)
+
         self.buttonCancela = tk.Button(self.frameButton, text="Cancelar", font=('negrito', 9))
         self.buttonCancela.pack(side="left")
         self.buttonCancela.bind("<Button>", controle.cancelaHandler)
@@ -161,11 +188,17 @@ class CtrlGP:
     def cadastrarSprint(self, event):
         self.GP = self.cadastra()
 
+        if self.GP == None:
+            return
+        
         self.limiteSprint = LimiteCadastraSprint(self)
 
     def cadastrarCorrida(self, event):
         self.GP = self.cadastra()
 
+        if self.GP == None:
+            return
+        
         self.limiteCorrida = LimiteCadastraCorrida(self)
 
     def cadastra(self):
@@ -197,6 +230,9 @@ class CtrlGP:
         self.limiteGP.mostraJanela('Sucesso', 'GP cadastrado com sucesso')
 
     def consultarGP(self):
+        pass
+
+    def cadastrarPiloto(self, event):
         pass
 
     def salvaGPs(self):

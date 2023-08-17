@@ -136,7 +136,7 @@ class Pista:
 class Resultado:
     def __init__(self, Piloto, posicao, voltaRapida):
         self.__Piloto = Piloto
-        self.__posicao = posicao
+        self.posicao = posicao
         self.__voltaRapida = voltaRapida
 
     @property
@@ -146,6 +146,15 @@ class Resultado:
     @property
     def posicao(self):
         return self.__posicao
+    
+    @posicao.setter
+    def posicao(self, posicao):
+        if posicao < 0:
+            raise ValueError("A posição não pode ser negativa")
+        elif posicao > 30 and (posicao != 1000 and posicao != 2000 and posicao != 3000):
+            raise ValueError("A posição não pode ser maior que 30")
+        else:
+            self.__posicao = posicao
     
     @property
     def voltaRapida(self):
