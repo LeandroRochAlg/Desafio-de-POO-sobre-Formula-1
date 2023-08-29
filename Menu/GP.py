@@ -117,11 +117,14 @@ class LimiteCadastraCorrida(tk.Toplevel):
         self.controle = controle
 
         self.framePiloto = tk.Frame(self)
+        self.frameInfo = tk.Frame(self)
         self.frameButton = tk.Frame(self)           #Frame para os botões
 
         self.framePiloto.pack()
+        self.frameInfo.pack()
         self.frameButton.pack()
 
+        #Cadastro de resultado de pilotos
         self.labelPiloto = tk.Label(self.framePiloto, text="Número do piloto: ")
         self.labelPiloto.pack(side="left")
         self.inputPiloto = tk.Entry(self.framePiloto, width=5)
@@ -149,6 +152,9 @@ class LimiteCadastraCorrida(tk.Toplevel):
         self.checkDesclassificado = tk.Checkbutton(self.framePiloto, variable=self.marcaDesclassificado)
         self.checkDesclassificado.pack(side="left")
 
+        #Informações da corrida
+        #Data
+        
 
         # Botões
         self.buttonPiloto = tk.Button(self.framePiloto, text="Cadastrar resultado do piloto", font=('negrito', 9))
@@ -161,7 +167,7 @@ class LimiteCadastraCorrida(tk.Toplevel):
 
         self.buttonFecha = tk.Button(self.frameButton, text="Concluído", font=('negrito', 9))
         self.buttonFecha.pack(side="left")
-        self.buttonFecha.bind("<Button>", controle.concluiHandler)
+        self.buttonFecha.bind("<Button>", controle.concluiCorridaHandler)
 
     def mostraJanela(self, titulo, msg):
         messagebox.showinfo(titulo, msg)  
@@ -182,6 +188,8 @@ class CtrlGP:
 
         for pista in self.ctrlPrincipal.ctrlPista.listaPistas:
             pistas.append(pista.nome)
+
+        self.resultadoCorrida = []
 
         self.limiteGP = LimiteCriaGP(self, pistas)
 
@@ -233,7 +241,31 @@ class CtrlGP:
         pass
 
     def cadastrarPiloto(self, event):
-        pass
+        for piloto in self.ctrlPrincipal.ctrlPiloto.listaPilotos:
+            if piloto.numero == int(self.limiteCorrida.inputPiloto.get()):
+                Piloto = piloto
+
+        if self.limiteCorrida.marcaDesclassificado.get():
+            posicao = 3000
+        elif self.limiteCorrida.marcaAbandonou.get():
+            posicao = 1000
+        else:
+            posicao = int(self.limiteCorrida.inputPosicao.get())
+
+        try:
+            Resultado = model.Resultado(Piloto, posicao, self.limiteCorrida.marcaVoltaRapida.get())
+        except ValueError as error:
+            self.limiteCorrida.mostraJanela('Erro', str(error))
+            return
+
+        self.resultadosCorrida.append(Resultado)
+
+        self.limiteCorrida.mostraJanela('Sucesso', 'Resultado do piloto cadastrado com sucesso')
+
+    def concluiCorridaHandler(self, event):
+        self.GP.Corrida = model.Corrida(self.resultadosCorrida)
+        self.listaGPs.append(self.GP)
+        self.limiteCorrida.mostraJanela('Sucesso', 'Corrida cadastrada com sucesso')
 
     def salvaGPs(self):
         if len(self.listaGPs) != 0:
