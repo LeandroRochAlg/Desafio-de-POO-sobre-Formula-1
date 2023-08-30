@@ -117,11 +117,13 @@ class LimiteCadastraCorrida(tk.Toplevel):
         self.controle = controle
 
         self.framePiloto = tk.Frame(self)
-        self.frameInfo = tk.Frame(self)
+        self.frameHorario = tk.Frame(self)
+        self.frameVoltas = tk.Frame(self)
         self.frameButton = tk.Frame(self)           #Frame para os botões
 
         self.framePiloto.pack()
-        self.frameInfo.pack()
+        self.frameHorario.pack()
+        self.frameVoltas.pack()
         self.frameButton.pack()
 
         #Cadastro de resultado de pilotos
@@ -129,10 +131,10 @@ class LimiteCadastraCorrida(tk.Toplevel):
         self.labelPiloto.pack(side="left")
         self.inputPiloto = tk.Entry(self.framePiloto, width=5)
         self.inputPiloto.pack(side="left")
-        self.labelPiloto = tk.Label(self.framePiloto, text="Posição: ")
-        self.labelPiloto.pack(side="left")
-        self.inputPiloto = tk.Entry(self.framePiloto, width=5)
-        self.inputPiloto.pack(side="left")
+        self.inputPosicao = tk.Label(self.framePiloto, text="Posição: ")
+        self.inputPosicao.pack(side="left")
+        self.inputPosicao = tk.Entry(self.framePiloto, width=5)
+        self.inputPosicao.pack(side="left")
 
         self.labelVoltaRapida = tk.Label(self.framePiloto, text="Volta mais rápida: ")
         self.labelVoltaRapida.pack(side="left")
@@ -153,8 +155,33 @@ class LimiteCadastraCorrida(tk.Toplevel):
         self.checkDesclassificado.pack(side="left")
 
         #Informações da corrida
-        #Data
-        
+        #Horário de largada
+        self.labelData = tk.Label(self.frameHorario, text="Horário de início da corrida: ")
+        self.labelData.pack(side="top")
+        # Combobox para escolher a hora
+        self.labelHora = tk.Label(self.frameHorario, text="Hora: ")
+        self.labelHora.pack(side="left")
+        self.escolhaHora = tk.IntVar()
+        self.comboHora = ttk.Combobox(self.frameHorario, width=3, textvariable=self.escolhaHora, values=list(range(1, 24)))
+        self.comboHora.pack(side="left")
+        # Combobox para escolher os minutos
+        self.labelMes = tk.Label(self.frameHorario, text="Minuto: ")
+        self.labelMes.pack(side="left")
+        self.escolhaMes = tk.IntVar()
+        self.comboMes = ttk.Combobox(self.frameHorario, width=3, textvariable=self.escolhaMes, values=list(range(1, 60)))
+        self.comboMes.pack(side="left")
+
+        #Número de voltas
+        self.labelVoltas = tk.Label(self.frameVoltas, text="Número de voltas: ")
+        self.labelVoltas.pack(side="left")
+        self.inputVoltas = tk.Entry(self.frameVoltas, width=5)
+        self.inputVoltas.pack(side="left")
+        #A corrida conta 100% dos pontos
+        self.labelPontos = tk.Label(self.frameVoltas, text="A corrida foi completa: ")
+        self.labelPontos.pack(side="left")
+        self.marcaPontos = tk.IntVar()
+        self.checkPontos = tk.Checkbutton(self.frameVoltas, variable=self.marcaPontos)
+        self.checkPontos.pack(side="left")
 
         # Botões
         self.buttonPiloto = tk.Button(self.framePiloto, text="Cadastrar resultado do piloto", font=('negrito', 9))
@@ -163,7 +190,7 @@ class LimiteCadastraCorrida(tk.Toplevel):
 
         self.buttonCancela = tk.Button(self.frameButton, text="Cancelar", font=('negrito', 9))
         self.buttonCancela.pack(side="left")
-        self.buttonCancela.bind("<Button>", controle.cancelaHandler)
+        self.buttonCancela.bind("<Button>", controle.cancelaCorridaHandler)
 
         self.buttonFecha = tk.Button(self.frameButton, text="Concluído", font=('negrito', 9))
         self.buttonFecha.pack(side="left")
@@ -189,7 +216,7 @@ class CtrlGP:
         for pista in self.ctrlPrincipal.ctrlPista.listaPistas:
             pistas.append(pista.nome)
 
-        self.resultadoCorrida = []
+        self.resultadosCorrida = []
 
         self.limiteGP = LimiteCriaGP(self, pistas)
 
@@ -262,10 +289,61 @@ class CtrlGP:
 
         self.limiteCorrida.mostraJanela('Sucesso', 'Resultado do piloto cadastrado com sucesso')
 
+        #Limpa os campos de número e posição
+        self.limiteCorrida.inputPiloto.delete(0, len(self.limiteCorrida.inputPiloto.get()))
+        self.limiteCorrida.inputPosicao.delete(0, len(self.limiteCorrida.inputPosicao.get()))
+
     def concluiCorridaHandler(self, event):
-        self.GP.Corrida = model.Corrida(self.resultadosCorrida)
-        self.listaGPs.append(self.GP)
-        self.limiteCorrida.mostraJanela('Sucesso', 'Corrida cadastrada com sucesso')
+        hora = f"{self.limiteCorrida.escolhaHora.get()}:{self.limiteCorrida.escolhaMes.get()}"  #Concatena a hora em uma string
+        voltas = int(self.limiteCorrida.inputVoltas.get())
+
+        for piloto in self.ctrlPrincipal.ctrlPiloto.listaPilotos:
+            if piloto not in self.resultadosCorrida:
+                Resultado = model.Resultado(piloto, 2000, False)    #Os pilotos não registrados não largaram
+                self.resultadosCorrida.append(Resultado)
+
+        try:
+            self.GP.Corrida = model.Corrida(hora, voltas, self.resultadosCorrida)
+            self.listaGPs.append(self.GP)
+            self.limiteCorrida.mostraJanela('Sucesso', 'Corrida cadastrada com sucesso')
+
+            self.atribuiPontosCorrida(self.GP.Corrida)
+        except ValueError as error:
+            self.limiteCorrida.mostraJanela('Erro', str(error))
+            return
+        
+    def atribuiPontosCorrida(self, Corrida):
+        #Dicionário com a pontuação padrão
+        pontos = {
+            1: 25,
+            2: 18,
+            3: 15,
+            4: 12,
+            5: 10,
+            6: 8,
+            7: 6,
+            8: 4,
+            9: 2,
+            10: 1
+        }
+
+        if self.limiteCorrida.marcaPontos.get():    #Se a corrida foi completa, todos os pilotos recebem 100% dos pontos
+            multiplicador = 1
+        else:   #Se não, apenas 50% dos pontos são atribuidos
+            multiplicador = 0.5
+
+        for resultado in Corrida.resultados:
+            if resultado.posicao in pontos.keys():  #Verifica se o piloto terminou a corrida
+                pontos = pontos[resultado.posicao] * multiplicador    #Multiplica a pontuação pelo multiplicador
+
+                if resultado.voltaRapida:   #Apenas se o piloto terminou a corrida a volta rápida é contabilizada
+                    pontos += 1
+
+                resultado.Piloto.adicionaPontos(pontos)   #Adiciona os pontos ao piloto
+                resultado.Piloto.Equipe.adicionaPontos(pontos)   #Adiciona os pontos à equipe do piloto
+
+    def cancelaCorridaHandler(self, event):
+        self.limiteCorrida.destroy()
 
     def salvaGPs(self):
         if len(self.listaGPs) != 0:

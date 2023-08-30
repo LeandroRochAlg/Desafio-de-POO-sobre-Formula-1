@@ -178,14 +178,14 @@ class Resultado:
         return ret
     
 class Corrida:
-    def __init__(self, data, nVoltas, resultados):
-        self.__data = data
+    def __init__(self, horaLargada, nVoltas, resultados):
+        self.__horaLargada = horaLargada
         self.__nVoltas = nVoltas
         self.__resultados = resultados
     
     @property
-    def data(self):
-        return self.__data
+    def horaLargada(self):
+        return self.__horaLargada
     
     @property
     def nVoltas(self):
@@ -203,7 +203,7 @@ class Corrida:
         self.__resultados.append(Resultado)
     
     def __str__(self):
-        ret = f"Data: {self.__data}\nResultados:"
+        ret = f"Horário de largada: {self.__horaLargada}\nResultados:"
 
         #Ordena os resultados pela posição
         for i in range(len(self.__resultados)):
@@ -222,8 +222,8 @@ class GP:
         self.nome = nome
         self.__Pista = Pista
         self.dataInicio = dataInicio
-        self.__Corrida = Corrida
-        self.__Sprint = Sprint
+        self.Corrida = Corrida
+        self.Sprint = Sprint
 
     @property
     def nome(self):
@@ -252,9 +252,17 @@ class GP:
     def Corrida(self):
         return self.__Corrida
     
+    @Corrida.setter
+    def Corrida(self, Corrida):
+        self.__Corrida = Corrida
+    
     @property
     def Sprint(self):
         return self.__Sprint
+    
+    @Sprint.setter
+    def Sprint(self, Sprint):
+        self.__Sprint = Sprint
     
     def __str__(self):
         ret = f"Nome: {self.__nome}\nPista: {self.__Pista.nome}\nData de início: {self.__dataInicio.strftime('%d/%m/%Y')}\n"
