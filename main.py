@@ -6,6 +6,7 @@ class LimitePrincipal():
         self.controle = controle
         self.root = root
         self.root.geometry('350x300')
+        self.root.title("Fórmula 1")
     
         self.menubar = tk.Menu(self.root)   #Cria a barra de menus
 
