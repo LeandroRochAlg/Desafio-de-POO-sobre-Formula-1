@@ -314,7 +314,7 @@ class CtrlGP:
         
     def atribuiPontosCorrida(self, Corrida):
         #Dicionário com a pontuação padrão
-        pontos = {
+        pontosPadrao = {
             1: 25,
             2: 18,
             3: 15,
@@ -333,8 +333,8 @@ class CtrlGP:
             multiplicador = 0.5
 
         for resultado in Corrida.resultados:
-            if resultado.posicao in pontos.keys():  #Verifica se o piloto terminou a corrida
-                pontos = pontos[resultado.posicao] * multiplicador    #Multiplica a pontuação pelo multiplicador
+            if resultado.posicao in pontosPadrao.keys():  #Verifica se o piloto terminou a corrida
+                pontos = pontosPadrao[resultado.posicao] * multiplicador    #Multiplica a pontuação pelo multiplicador
 
                 if resultado.voltaRapida:   #Apenas se o piloto terminou a corrida a volta rápida é contabilizada
                     pontos += 1
