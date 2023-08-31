@@ -271,6 +271,16 @@ class CtrlGP:
         for piloto in self.ctrlPrincipal.ctrlPiloto.listaPilotos:
             if piloto.numero == int(self.limiteCorrida.inputPiloto.get()):
                 Piloto = piloto
+                break
+        
+        if Piloto in self.resultadosCorrida:  #Verifica se o piloto já foi registrado
+            self.limiteCorrida.mostraJanela('Erro', 'Esse piloto já foi registrado')
+            return
+        elif self.limiteCorrida.marcaVoltaRapida.get():
+            for resultado in self.resultadosCorrida:
+                if resultado.voltaRapida:
+                    self.limiteCorrida.mostraJanela('Erro', 'Já existe uma volta mais rápida registrada')
+                    return
 
         if self.limiteCorrida.marcaDesclassificado.get():
             posicao = 3000
@@ -285,13 +295,16 @@ class CtrlGP:
             self.limiteCorrida.mostraJanela('Erro', str(error))
             return
 
+        #Finalizações
         self.resultadosCorrida.append(Resultado)
-
         self.limiteCorrida.mostraJanela('Sucesso', 'Resultado do piloto cadastrado com sucesso')
 
-        #Limpa os campos de número e posição
+        #Limpa os campos
         self.limiteCorrida.inputPiloto.delete(0, len(self.limiteCorrida.inputPiloto.get()))
         self.limiteCorrida.inputPosicao.delete(0, len(self.limiteCorrida.inputPosicao.get()))
+        self.limiteCorrida.marcaAbandonou.set(0)
+        self.limiteCorrida.marcaDesclassificado.set(0)
+        self.limiteCorrida.marcaVoltaRapida.set(0)
 
     def concluiCorridaHandler(self, event):
         hora = f"{self.limiteCorrida.escolhaHora.get()}:{self.limiteCorrida.escolhaMes.get()}"  #Concatena a hora em uma string

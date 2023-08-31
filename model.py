@@ -135,13 +135,20 @@ class Pista:
     
 class Resultado:
     def __init__(self, Piloto, posicao, voltaRapida):
-        self.__Piloto = Piloto
+        self.Piloto = Piloto
         self.posicao = posicao
         self.__voltaRapida = voltaRapida
 
     @property
     def Piloto(self):
         return self.__Piloto
+    
+    @Piloto.setter
+    def Piloto(self, Piloto):
+        if Piloto == None:
+            raise ValueError("O piloto não pode ser vazio")
+        else:
+            self.__Piloto = Piloto
     
     @property
     def posicao(self):
