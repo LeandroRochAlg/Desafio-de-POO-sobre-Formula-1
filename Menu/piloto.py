@@ -125,7 +125,7 @@ class CtrlPiloto:
 
                 self.listaPilotos.append(model.Piloto(nome, pais, numero, Equipe))
                 self.limiteCadastro.mostraJanela('Sucesso', 'Piloto cadastrado com sucesso!')
-                self.limiteCadastro.destroy()
+                self.clearHandler(event)
             except ValueError as error:
                 self.limiteCadastro.mostraJanela('Erro', str(error))
         else:
