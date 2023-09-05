@@ -109,13 +109,13 @@ class CtrlEquipe:
                 self.listaEquipes = pickle.load(f)
 
     def cadastrarEquipe(self):
-        listaMotores = []
+        self.listaMotores = []
 
         for equipe in self.listaEquipes:    #Pega os motores já cadastrados
             if equipe.Motor.nome == equipe.nome:
-                listaMotores.append(equipe.Motor.nome)
+                self.listaMotores.append(equipe.Motor.nome)
 
-        self.limiteCadastra = LimiteCadastraEquipe(self, listaMotores)
+        self.limiteCadastra = LimiteCadastraEquipe(self, self.listaMotores)
 
     def enterHandlerEquipe(self, event):
         nome = self.limiteCadastra.inputNome.get()
@@ -124,15 +124,19 @@ class CtrlEquipe:
         motor = self.limiteCadastra.escolhaMotor.get()
         mark = self.limiteCadastra.escolhaMark.get()
 
-        if mark == 1:
+        if mark and motor != '':    #Se a equipe fabrica os próprios motores e um motor foi selecionado
+            self.limiteCadastra.mostraJanela('Opa', 'A equipe não pode fabricar os próprios motores e selecionar um motor')
+            return
+        elif mark:
             try:
                 equipe = model.Equipe(nome, pais, chefeEquipe)
 
-                self.listaEquipes.append(equipe)
-                self.limiteCadastra.mostraJanela('Sucesso', 'Equipe cadastrada com sucesso')
-                self.clearHandlerEquipe(event)
+                #Atualiza a lista de motores disponíveis para a seleção
+                self.listaMotores.append(equipe.nome)
+                self.limiteCadastra.comboMotor['values'] = self.listaMotores
             except ValueError as error:
                 self.limiteCadastra.mostraJanela('Erro', error)
+                return
         else:
             for equipe in self.listaEquipes:    #Pega a classe do motor escolhido
                 if motor == equipe.nome:
@@ -140,12 +144,13 @@ class CtrlEquipe:
 
             try:
                 equipe = model.Equipe(nome, pais, chefeEquipe, Motor)
-
-                self.listaEquipes.append(equipe)
-                self.limiteCadastra.mostraJanela('Sucesso', 'Equipe cadastrada com sucesso')
-                self.clearHandlerEquipe(event)
             except ValueError as error:
                 self.limiteCadastra.mostraJanela('Erro', error)
+                return
+            
+        self.listaEquipes.append(equipe)
+        self.limiteCadastra.mostraJanela('Sucesso', 'Equipe cadastrada com sucesso')
+        self.clearHandlerEquipe(event)
 
     def clearHandlerEquipe(self, event):
         self.limiteCadastra.inputNome.delete(0, len(self.limiteCadastra.inputNome.get()))
