@@ -100,7 +100,7 @@ class Piloto(Competidor):
         self.__Equipe = Equipe
     
     def __str__(self):
-        return f"Nome: {self.nome}\nPaís: {self.pais}\nEquipe: {self.__Equipe.nome}\nPontos: {self.pontos}"
+        return f"{self.__numero} - {self.nome}\nPaís: {self.pais}\nEquipe: {self.__Equipe.nome}\nPontos: {self.pontos}"
     
 class Pista:
     def __init__(self, nome, pais, cidade, tamanho):
