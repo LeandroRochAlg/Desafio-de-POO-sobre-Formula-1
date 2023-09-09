@@ -21,6 +21,7 @@ class LimitePrincipal():
         #Adiciona os botões dos menus
         self.equipeMenu.add_command(label="Cadastrar", command=self.controle.cadastrarEquipe)
         self.equipeMenu.add_command(label="Listar", command=self.controle.listarEquipes)
+        self.equipeMenu.add_command(label="Alterar equipe", command=self.controle.alterarEquipe)
 
         self.pilotoMenu.add_command(label="Cadastrar", command=self.controle.cadastrarPiloto)
         self.pilotoMenu.add_command(label="Listar", command=self.controle.listarPilotos)
@@ -67,6 +68,9 @@ class ControlePrincipal():
 
     def listarEquipes(self):
         self.ctrlEquipe.listarEquipes()
+
+    def alterarEquipe(self):
+        self.ctrlEquipe.alterarEquipe()
     
     def cadastrarPiloto(self):
         self.ctrlPiloto.cadastrarPiloto()

@@ -98,6 +98,74 @@ class LimiteMostraEquipes():
         for equipe in equipes:
             self.tabela.insert('', 'end', values=(equipe.nome, equipe.pais, equipe.chefeEquipe, equipe.Motor.nome))
 
+class LimiteAlteraEquipe(tk.Toplevel):
+    def __init__(self, controle):
+        tk.Toplevel.__init__(self)
+        self.geometry('300x100')
+        self.title("Selecione a equipe")
+        self.controle = controle
+
+        self.frameEquipe = tk.Frame(self)
+        self.frameButton = tk.Frame(self)
+
+        self.frameEquipe.pack()
+        self.frameButton.pack()
+
+        self.comboEquipe = ttk.Combobox(self.frameEquipe, width=17, values=self.controle.getNomesEquipes())
+        self.comboEquipe.pack(side="left")
+
+        # Botões
+        self.buttonSubmit = tk.Button(self.frameButton, text="Enter", font=('negrito', 9))
+        self.buttonSubmit.pack(side="left")
+        self.buttonSubmit.bind("<Button>", self.alteraEquipe)
+
+        self.buttonFecha = tk.Button(self.frameButton, text="Cancelar", font=('negrito', 9))
+        self.buttonFecha.pack(side="left")
+        self.buttonFecha.bind("<Button>", self.controle.fechaHandler)
+
+    def alteraEquipe(self, event):
+        tk.Toplevel.__init__(self)
+        self.geometry('300x100')
+        self.title("Alterar equipe")
+
+        self.frameNome = tk.Frame(self)
+        self.framePais = tk.Frame(self)
+        self.frameChefeEquipe = tk.Frame(self)
+        self.frameButton = tk.Frame(self)
+
+        self.frameNome.pack()
+        self.framePais.pack()
+        self.frameChefeEquipe.pack()
+        self.frameButton.pack()
+
+        self.labelNome = tk.Label(self.frameNome, text="Nome: ")
+        self.labelPais = tk.Label(self.framePais, text="País: ")
+        self.labelChefeEquipe = tk.Label(self.frameChefeEquipe, text="Chefe de equipe: ")
+        
+        self.labelNome.pack(side="left")
+        self.labelPais.pack(side="left")
+        self.labelChefeEquipe.pack(side="left")
+
+        self.inputNome = tk.Entry(self.frameNome, width=20)
+        self.inputPais = tk.Entry(self.framePais, width=20)
+        self.inputChefeEquipe = tk.Entry(self.frameChefeEquipe, width=20)
+
+        self.inputNome.pack(side="left")
+        self.inputPais.pack(side="left")
+        self.inputChefeEquipe.pack(side="left")
+
+        # Botões
+        self.buttonSubmit = tk.Button(self.frameButton, text="Enter", font=('negrito', 9))
+        self.buttonSubmit.pack(side="left")
+        self.buttonSubmit.bind("<Button>", self.controle.enterAlteraHandler)
+
+        self.buttonFecha = tk.Button(self.frameButton, text="Cancelar", font=('negrito', 9))
+        self.buttonFecha.pack(side="left")
+        self.buttonFecha.bind("<Button>", self.controle.fechaHandler)
+
+    def mostraJanela(self, titulo, msg):
+        messagebox.showinfo(titulo, msg)
+
 class CtrlEquipe:
     def __init__(self, controlePrincipal):
         self.ctrlPrincipal = controlePrincipal
@@ -123,6 +191,11 @@ class CtrlEquipe:
         chefeEquipe = self.limiteCadastra.inputChefeEquipe.get()
         motor = self.limiteCadastra.escolhaMotor.get()
         mark = self.limiteCadastra.escolhaMark.get()
+
+        for equipe in self.listaEquipes:    #Verifica se a equipe já está cadastrada
+            if nome == equipe.nome:
+                self.limiteCadastra.mostraJanela('Erro', 'Equipe já cadastrada')
+                return
 
         if mark and motor != '':    #Se a equipe fabrica os próprios motores e um motor foi selecionado
             self.limiteCadastra.mostraJanela('Opa', 'A equipe não pode fabricar os próprios motores e selecionar um motor')
@@ -189,3 +262,31 @@ class CtrlEquipe:
             nomes.append(equipe.nome)
 
         return nomes
+    
+    def alterarEquipe(self):
+        self.limiteAltera = LimiteAlteraEquipe(self)
+
+    def fechaHandler(self, event):
+        self.limiteAltera.destroy()
+
+    def enterAlteraHandler(self, event):
+        equipe = self.limiteAltera.comboEquipe.get()
+
+        for equipe in self.listaEquipes:
+            if equipe.nome == self.limiteAltera.comboEquipe.get():
+                try:
+                    nome = self.limiteAltera.inputNome.get()
+                    pais = self.limiteAltera.inputPais.get()
+                    chefeEquipe = self.limiteAltera.inputChefeEquipe.get()
+
+                    # Verifica se os campos foram preenchidos
+                    if nome != '':
+                        equipe.nome = nome
+                    if pais != '':
+                        equipe.pais = pais
+                    if chefeEquipe != '':
+                        equipe.chefeEquipe = chefeEquipe
+                except ValueError as error:
+                    self.limiteAltera.mostraJanela('Erro', error)
+                    return
+                break
