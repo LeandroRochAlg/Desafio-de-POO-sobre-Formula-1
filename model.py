@@ -76,7 +76,7 @@ class Piloto(Competidor):
     def __init__(self, nome, pais, numero, Equipe):
         super().__init__(nome, pais)
         self.numero = numero
-        self.__Equipe = Equipe
+        self.Equipe = Equipe
 
     @property
     def numero(self):
@@ -94,6 +94,10 @@ class Piloto(Competidor):
     @property
     def Equipe(self):
         return self.__Equipe
+    
+    @Equipe.setter
+    def Equipe(self, Equipe):
+        self.__Equipe = Equipe
     
     def __str__(self):
         return f"Nome: {self.nome}\nPaís: {self.pais}\nEquipe: {self.__Equipe.nome}\nPontos: {self.pontos}"
