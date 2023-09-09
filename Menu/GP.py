@@ -80,10 +80,10 @@ class LimiteCriaGP(tk.Toplevel):
         messagebox.showinfo(titulo, msg)
 
 class LimiteCadastraSprint(tk.Toplevel):
-    def __init__(self, controle):
+    def __init__(self, controle, nomeGP):
         tk.Toplevel.__init__(self)
         self.geometry('800x400')
-        self.title("Registrar corrida Sprint")
+        self.title(f"Sprint - {nomeGP}")
         self.controle = controle
 
         self.framePiloto = tk.Frame(self)
@@ -164,10 +164,10 @@ class LimiteCadastraSprint(tk.Toplevel):
         messagebox.showinfo(titulo, msg)
 
 class LimiteCadastraCorrida(tk.Toplevel):
-    def __init__(self, controle):
+    def __init__(self, controle, nomeGP):
         tk.Toplevel.__init__(self)
         self.geometry('800x400')
-        self.title("Registrar corrida")
+        self.title(f"Corrida - {nomeGP}")
         self.controle = controle
 
         self.framePiloto = tk.Frame(self)
@@ -282,7 +282,7 @@ class CtrlGP:
         
         self.tipoCorrida = 'Sprint'
         
-        self.limiteCorrida = LimiteCadastraSprint(self)
+        self.limiteCorrida = LimiteCadastraSprint(self, self.GP.nome)
 
     def cadastrarCorrida(self, event):
         self.GP = self.cadastra()
@@ -292,7 +292,7 @@ class CtrlGP:
         
         self.tipoCorrida = 'Corrida'
 
-        self.limiteCorrida = LimiteCadastraCorrida(self)
+        self.limiteCorrida = LimiteCadastraCorrida(self, self.GP.nome)
 
     def cadastra(self):
         nome = self.limiteGP.inputGP.get()
