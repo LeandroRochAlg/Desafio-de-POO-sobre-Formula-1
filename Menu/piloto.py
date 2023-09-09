@@ -115,21 +115,26 @@ class CtrlPiloto:
         
         equipe = self.limiteCadastro.escolhaEquipe.get()
 
-        piloto = self.getPiloto(nome)   # Verifica se o piloto já está cadastrado
+        try:
+            for e in self.ctrlPrincipal.ctrlEquipe.listaEquipes:    # Obtem a equipe do piloto
+                if e.nome == equipe:
+                    Equipe = e
 
-        if piloto == None:
-            try:
-                for e in self.ctrlPrincipal.ctrlEquipe.listaEquipes:    # Obtem a equipe do piloto
-                    if e.nome == equipe:
-                        Equipe = e
+            for piloto in self.listaPilotos:
+                if piloto.numero == numero: #altera o piloto caso o número já esteja cadastrado
+                    piloto.nome = nome
+                    piloto.pais = pais
+                    piloto.equipe = Equipe
 
-                self.listaPilotos.append(model.Piloto(nome, pais, numero, Equipe))
-                self.limiteCadastro.mostraJanela('Sucesso', 'Piloto cadastrado com sucesso!')
-                self.clearHandler(event)
-            except ValueError as error:
-                self.limiteCadastro.mostraJanela('Erro', str(error))
-        else:
-            messagebox.showinfo('Alerta', 'Piloto já cadastrado!')
+                    self.limiteCadastro.mostraJanela('Sucesso', 'Piloto alterado com sucesso!')
+                    self.clearHandler(event)
+                    return
+
+            self.listaPilotos.append(model.Piloto(nome, pais, numero, Equipe))
+            self.limiteCadastro.mostraJanela('Sucesso', 'Piloto cadastrado com sucesso!')
+            self.clearHandler(event)
+        except ValueError as error:
+            self.limiteCadastro.mostraJanela('Erro', str(error))
 
     def clearHandler(self, event):
         self.limiteCadastro.inputNome.delete(0, len(self.limiteCadastro.inputNome.get()))
@@ -138,13 +143,6 @@ class CtrlPiloto:
 
     def fechaHandler(self, event):
         self.limiteCadastro.destroy()
-
-    def getPiloto(self, nome):
-        pilotoRet = None
-        for p in self.listaPilotos:
-            if p.nome == nome:
-                pilotoRet = p
-        return pilotoRet
 
     def listarPilotos(self):
         pilotos = ''
