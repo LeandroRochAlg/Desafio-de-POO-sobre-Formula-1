@@ -90,7 +90,6 @@ class LimiteMostraPilotos(tk.Toplevel):    #Tela com uma caixa de texto com as i
 class CtrlPiloto:
     def __init__(self, controlePrincipal):
         self.ctrlPrincipal = controlePrincipal
-        self.listaPilotos = []
 
         if not os.path.isfile("Cadastros/pilotos.pickle"):
             self.listaPilotos = []
@@ -131,6 +130,8 @@ class CtrlPiloto:
                     return
 
             self.listaPilotos.append(model.Piloto(nome, pais, numero, Equipe))
+            self.listaPilotos.sort(key=lambda piloto: piloto.numero) # Ordena a lista de pilotos pelo número
+
             self.limiteCadastro.mostraJanela('Sucesso', 'Piloto cadastrado com sucesso!')
             self.clearHandler(event)
         except ValueError as error:
