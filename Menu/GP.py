@@ -56,7 +56,7 @@ class LimiteCriaGP(tk.Toplevel):
         self.labelAno = tk.Label(self.frameData, text="Ano: ")
         self.labelAno.pack(side="left")
         self.escolhaAno = tk.IntVar()
-        self.comboAno = ttk.Combobox(self.frameData, width=5, textvariable=self.escolhaAno, values=list(range(1950, 2031))) #1950 foi a primeira temporada da Formula 1
+        self.comboAno = ttk.Combobox(self.frameData, width=5, textvariable=self.escolhaAno, values=list(range(2030, 1949, -1))) #1950 foi a primeira temporada da Formula 1
         self.comboAno.pack(side="left")
 
         # Botões
@@ -79,116 +79,36 @@ class LimiteCriaGP(tk.Toplevel):
     def mostraJanela(self, titulo, msg):
         messagebox.showinfo(titulo, msg)
 
-class LimiteCadastraSprint(tk.Toplevel):
-    def __init__(self, controle, nomeGP):
-        tk.Toplevel.__init__(self)
-        self.geometry('800x400')
-        self.title(f"Sprint - {nomeGP}")
-        self.controle = controle
-
-        self.framePiloto = tk.Frame(self)
-        self.frameHorario = tk.Frame(self)
-        self.frameVoltas = tk.Frame(self)
-        self.frameButton = tk.Frame(self)           #Frame para os botões
-
-        self.framePiloto.pack()
-        self.frameHorario.pack()
-        self.frameVoltas.pack()
-        self.frameButton.pack()
-
-        #Cadastro de resultado de pilotos
-        self.labelPiloto = tk.Label(self.framePiloto, text="Número do piloto: ")
-        self.labelPiloto.pack(side="left")
-        self.inputPiloto = tk.Entry(self.framePiloto, width=5)
-        self.inputPiloto.pack(side="left")
-        self.inputPosicao = tk.Label(self.framePiloto, text="Posição: ")
-        self.inputPosicao.pack(side="left")
-        self.inputPosicao = tk.Entry(self.framePiloto, width=5)
-        self.inputPosicao.pack(side="left")
-
-        self.labelVoltaRapida = tk.Label(self.framePiloto, text="Volta mais rápida: ")
-        self.labelVoltaRapida.pack(side="left")
-        self.marcaVoltaRapida = tk.IntVar()
-        self.checkVoltaRapida = tk.Checkbutton(self.framePiloto, variable=self.marcaVoltaRapida)
-        self.checkVoltaRapida.pack(side="left")
-
-        self.labelAbandonou = tk.Label(self.framePiloto, text="Abandonou: ")
-        self.labelAbandonou.pack(side="left")
-        self.marcaAbandonou = tk.IntVar()
-        self.checkAbandonou = tk.Checkbutton(self.framePiloto, variable=self.marcaAbandonou)
-        self.checkAbandonou.pack(side="left")
-
-        self.labelDesclassificado = tk.Label(self.framePiloto, text="Desclassificado: ")
-        self.labelDesclassificado.pack(side="left")
-        self.marcaDesclassificado = tk.IntVar()
-        self.checkDesclassificado = tk.Checkbutton(self.framePiloto, variable=self.marcaDesclassificado)
-        self.checkDesclassificado.pack(side="left")
-
-        #Informações da corrida
-        #Horário de largada
-        self.labelData = tk.Label(self.frameHorario, text="Horário de início da corrida: ")
-        self.labelData.pack(side="top")
-        # Combobox para escolher a hora
-        self.labelHora = tk.Label(self.frameHorario, text="Hora: ")
-        self.labelHora.pack(side="left")
-        self.escolhaHora = tk.IntVar()
-        self.comboHora = ttk.Combobox(self.frameHorario, width=3, textvariable=self.escolhaHora, values=list(range(1, 24)))
-        self.comboHora.pack(side="left")
-        # Combobox para escolher os minutos
-        self.labelMinuto = tk.Label(self.frameHorario, text="Minuto: ")
-        self.labelMinuto.pack(side="left")
-        self.escolhaMinuto = tk.IntVar()
-        self.comboMinuto = ttk.Combobox(self.frameHorario, width=3, textvariable=self.escolhaMinuto, values=list(range(1, 60)))
-        self.comboMinuto.pack(side="left")
-
-        #Número de voltas
-        self.labelVoltas = tk.Label(self.frameVoltas, text="Número de voltas: ")
-        self.labelVoltas.pack(side="left")
-        self.inputVoltas = tk.Entry(self.frameVoltas, width=5)
-        self.inputVoltas.pack(side="left")
-
-        # Botões
-        self.buttonPiloto = tk.Button(self.framePiloto, text="Cadastrar resultado do piloto", font=('negrito', 9))
-        self.buttonPiloto.pack(side="left")
-        self.buttonPiloto.bind("<Button>", controle.cadastrarPiloto)
-
-        self.buttonCancela = tk.Button(self.frameButton, text="Cancelar", font=('negrito', 9))
-        self.buttonCancela.pack(side="left")
-        self.buttonCancela.bind("<Button>", controle.cancelaCorridaHandler)
-
-        self.buttonFecha = tk.Button(self.frameButton, text="Concluído", font=('negrito', 9))
-        self.buttonFecha.pack(side="left")
-        self.buttonFecha.bind("<Button>", controle.concluiSprintHandler)
-
-    def mostraJanela(self, titulo, msg):
-        messagebox.showinfo(titulo, msg)
-
 class LimiteCadastraCorrida(tk.Toplevel):
-    def __init__(self, controle, nomeGP):
+    def __init__(self, controle, nomeGP, sprint, pilotos):
         tk.Toplevel.__init__(self)
-        self.geometry('800x400')
-        self.title(f"Corrida - {nomeGP}")
+        self.geometry('950x600')
+
+        if sprint:
+            self.title(f"Sprint - {nomeGP}")
+        else:
+            self.title(f"Corrida - {nomeGP}")
+
         self.controle = controle
+        self.pos = 1    #Posição do piloto a ser cadastrado
 
         self.framePiloto = tk.Frame(self)
+        self.frameCadastros = tk.Frame(self)
         self.frameHorario = tk.Frame(self)
         self.frameVoltas = tk.Frame(self)
         self.frameButton = tk.Frame(self)           #Frame para os botões
 
         self.framePiloto.pack()
+        self.frameCadastros.pack()
         self.frameHorario.pack()
         self.frameVoltas.pack()
         self.frameButton.pack()
 
         #Cadastro de resultado de pilotos
-        self.labelPiloto = tk.Label(self.framePiloto, text="Número do piloto: ")
+        self.labelPiloto = tk.Label(self.framePiloto, text=f"Selecione o {self.pos} colocado: ")
         self.labelPiloto.pack(side="left")
-        self.inputPiloto = tk.Entry(self.framePiloto, width=5)
-        self.inputPiloto.pack(side="left")
-        self.inputPosicao = tk.Label(self.framePiloto, text="Posição: ")
-        self.inputPosicao.pack(side="left")
-        self.inputPosicao = tk.Entry(self.framePiloto, width=5)
-        self.inputPosicao.pack(side="left")
+        self.comboPiloto = ttk.Combobox(self.framePiloto, width=30, values=pilotos)
+        self.comboPiloto.pack(side="left")
 
         self.labelVoltaRapida = tk.Label(self.framePiloto, text="Volta mais rápida: ")
         self.labelVoltaRapida.pack(side="left")
@@ -208,7 +128,15 @@ class LimiteCadastraCorrida(tk.Toplevel):
         self.checkDesclassificado = tk.Checkbutton(self.framePiloto, variable=self.marcaDesclassificado)
         self.checkDesclassificado.pack(side="left")
 
+        #Pilotos já cadastrados
+        self.labelPilotos = tk.Label(self.frameCadastros, text="Pilotos já cadastrados: ")
+        self.labelPilotos.pack(side="top")
+        self.textPilotos = tk.Text(self.frameCadastros, height=20, width=50)
+        self.textPilotos.pack(side="left")
+
         #Informações da corrida
+        self.labelHorario = tk.Label(self.frameHorario, text="Informações da corrida")
+        self.labelHorario.pack(side="top")
         #Horário de largada
         self.labelData = tk.Label(self.frameHorario, text="Horário de início da corrida: ")
         self.labelData.pack(side="top")
@@ -230,17 +158,18 @@ class LimiteCadastraCorrida(tk.Toplevel):
         self.labelVoltas.pack(side="left")
         self.inputVoltas = tk.Entry(self.frameVoltas, width=5)
         self.inputVoltas.pack(side="left")
-        #A corrida conta 100% dos pontos
-        self.labelPontos = tk.Label(self.frameVoltas, text="A corrida foi completa: ")
-        self.labelPontos.pack(side="left")
-        self.marcaPontos = tk.IntVar()
-        self.checkPontos = tk.Checkbutton(self.frameVoltas, variable=self.marcaPontos)
-        self.checkPontos.pack(side="left")
+        self.corridaCompleta = tk.IntVar()
+        self.checkCorridaCompleta = tk.Checkbutton(self.frameVoltas, text="Corrida completa", variable=self.corridaCompleta)
+        self.checkCorridaCompleta.pack(side="left")
 
         # Botões
         self.buttonPiloto = tk.Button(self.framePiloto, text="Cadastrar resultado do piloto", font=('negrito', 9))
-        self.buttonPiloto.pack(side="left")
+        self.buttonPiloto.pack(side="top")
         self.buttonPiloto.bind("<Button>", controle.cadastrarPiloto)
+
+        self.buttonRemove = tk.Button(self.framePiloto, text="Remover último piloto", font=('negrito', 9))
+        self.buttonRemove.pack(side="left")
+        self.buttonRemove.bind("<Button>", controle.removePiloto)
 
         self.buttonCancela = tk.Button(self.frameButton, text="Cancelar", font=('negrito', 9))
         self.buttonCancela.pack(side="left")
@@ -252,6 +181,14 @@ class LimiteCadastraCorrida(tk.Toplevel):
 
     def mostraJanela(self, titulo, msg):
         messagebox.showinfo(titulo, msg)
+
+    def aumentaPosicao(self):
+        self.pos += 1
+        self.labelPiloto['text'] = f"Selecione o {self.pos} colocado: "
+
+    def diminuiPosicao(self):
+        self.pos -= 1
+        self.labelPiloto['text'] = f"Selecione o {self.pos} colocado: "
 
 class LimiteConsultaGP(tk.Toplevel):
     def __init__(self, controle):
@@ -311,7 +248,7 @@ class CtrlGP:
         
         self.tipoCorrida = 'Sprint'
         
-        self.limiteCorrida = LimiteCadastraSprint(self, self.GP.nome)
+        self.limiteCorrida = LimiteCadastraCorrida(self, self.GP.nome, True, self.ctrlPrincipal.ctrlPiloto.getNomesPilotos())
 
     def cadastrarCorrida(self, event):
         self.GP = self.cadastra()
@@ -321,7 +258,7 @@ class CtrlGP:
         
         self.tipoCorrida = 'Corrida'
 
-        self.limiteCorrida = LimiteCadastraCorrida(self, self.GP.nome)
+        self.limiteCorrida = LimiteCadastraCorrida(self, self.GP.nome, False, self.ctrlPrincipal.ctrlPiloto.getNomesPilotos())
 
     def cadastra(self):
         nome = self.limiteGP.inputGP.get()
@@ -329,7 +266,7 @@ class CtrlGP:
         data = f"{self.limiteGP.escolhaDia.get()}/{self.limiteGP.escolhaMes.get()}/{self.limiteGP.escolhaAno.get()}"    #Concatena a data em uma string
 
         for gp in self.listaGPs:
-            if gp.dataInicio.strftime('%d/%m/%Y') == data:  #Verifica se já existe um GP na data escolhida
+            if gp.nome == nome or gp.dataInicio.strftime('%d/%m/%Y') == data:   #Verifica se já existe um GP com o mesmo nome ou na mesma data
                 return gp
         
         #Se não houver, cria um novo
@@ -341,6 +278,10 @@ class CtrlGP:
         try:
             GP = model.GP(nome, pista, data)
             self.listaGPs.append(GP)
+
+            #ordena os GPs por data
+            self.listaGPs.sort(key=lambda gp: gp.dataInicio)
+
             return GP
         except ValueError as error:
             self.limiteGP.mostraJanela('Erro', str(error))
@@ -358,15 +299,27 @@ class CtrlGP:
     def cadastrarPiloto(self, event):
         Piloto = None
 
+        escolha = self.limiteCorrida.comboPiloto.get()
+
+        if escolha == '':
+            self.limiteCorrida.mostraJanela('Erro', 'Selecione um piloto')
+            return
+
+        #Divide a string do combobox para utilizar apenas o número do piloto
+        partes = escolha.split(' - ')
+        numero = int(partes[0])
+
         for piloto in self.ctrlPrincipal.ctrlPiloto.listaPilotos:
-            if piloto.numero == int(self.limiteCorrida.inputPiloto.get()):
+            if piloto.numero == numero:
                 Piloto = piloto
                 break
+
+        for resultado in self.resultadosCorrida:    #Verifica se o piloto já foi registrado
+            if resultado.Piloto == Piloto:
+                self.limiteCorrida.mostraJanela('Erro', 'Esse piloto já foi registrado')
+                return
         
-        if Piloto in self.resultadosCorrida:  #Verifica se o piloto já foi registrado
-            self.limiteCorrida.mostraJanela('Erro', 'Esse piloto já foi registrado')
-            return
-        elif self.limiteCorrida.marcaVoltaRapida.get():
+        if self.limiteCorrida.marcaVoltaRapida.get():
             for resultado in self.resultadosCorrida:
                 if resultado.voltaRapida:
                     self.limiteCorrida.mostraJanela('Erro', 'Já existe uma volta mais rápida registrada')
@@ -377,11 +330,7 @@ class CtrlGP:
         elif self.limiteCorrida.marcaAbandonou.get():
             posicao = 1000
         else:
-            try:
-                posicao = int(self.limiteCorrida.inputPosicao.get())
-            except ValueError:
-                self.limiteCorrida.mostraJanela('Erro', 'Posição inválida')
-                return
+            posicao = len(self.resultadosCorrida) + 1
 
         try:
             Resultado = model.Resultado(Piloto, posicao, self.limiteCorrida.marcaVoltaRapida.get())
@@ -392,13 +341,28 @@ class CtrlGP:
         #Finalizações
         self.resultadosCorrida.append(Resultado)
         self.limiteCorrida.mostraJanela('Sucesso', 'Resultado do piloto cadastrado com sucesso')
+        self.limiteCorrida.textPilotos.insert('end', str(Resultado) + '\n')
+        self.limiteCorrida.aumentaPosicao()
 
         #Limpa os campos
-        self.limiteCorrida.inputPiloto.delete(0, len(self.limiteCorrida.inputPiloto.get()))
-        self.limiteCorrida.inputPosicao.delete(0, len(self.limiteCorrida.inputPosicao.get()))
+        self.limiteCorrida.comboPiloto.set('')
         self.limiteCorrida.marcaAbandonou.set(0)
         self.limiteCorrida.marcaDesclassificado.set(0)
         self.limiteCorrida.marcaVoltaRapida.set(0)
+
+        self.limiteCorrida.comboPiloto['values'].remove(escolha)
+
+    def removePiloto(self, event):
+        if len(self.resultadosCorrida) == 0:
+            self.limiteCorrida.mostraJanela('Erro', 'Não há pilotos cadastrados')
+            return
+
+        self.resultadosCorrida.pop()
+        self.limiteCorrida.textPilotos.delete('1.0', 'end')
+        self.limiteCorrida.diminuiPosicao()
+
+        for resultado in self.resultadosCorrida:
+            self.limiteCorrida.textPilotos.insert('end', str(resultado) + '\n')
 
     def concluiCorridaHandler(self, event):
         hora = f"{self.limiteCorrida.escolhaHora.get()}:{self.limiteCorrida.escolhaMinuto.get()}"  #Concatena a hora em uma string
@@ -410,13 +374,14 @@ class CtrlGP:
                 self.resultadosCorrida.append(Resultado)
 
         try:
-            self.GP.Corrida = model.Corrida(hora, voltas, self.resultadosCorrida)
-            self.limiteCorrida.mostraJanela('Sucesso', 'Corrida cadastrada com sucesso')
-
             if self.tipoCorrida == 'Corrida':
+                self.GP.Corrida = model.Corrida(hora, voltas, self.resultadosCorrida, self.limiteCorrida.corridaCompleta.get())
+                self.limiteCorrida.mostraJanela('Sucesso', 'Corrida cadastrada com sucesso')
                 self.atribuiPontosCorrida(self.GP.Corrida)
             elif self.tipoCorrida == 'Sprint':
-                self.atribuiPontosSprint(self.GP.Corrida)
+                self.GP.Sprint = model.Corrida(hora, voltas, self.resultadosCorrida, self.limiteCorrida.corridaCompleta.get())
+                self.limiteCorrida.mostraJanela('Sucesso', 'Sprint cadastrada com sucesso')
+                self.atribuiPontosSprint(self.GP.Sprint)
             else:
                 raise ValueError('Desculpe, ocorreu um erro inesperado')
             
@@ -425,8 +390,8 @@ class CtrlGP:
             self.limiteCorrida.mostraJanela('Erro', str(error))
             return
         
-    def concluiSprintHandler(self, event):
-        #Dicinário com os pontos padrão da Sprint
+    def atribuiPontosSprint(self, Sprint):
+        #Dicionário com os pontos padrão da Sprint
         if self.GP.dataInicio.year == 2021: #É necessário checar se existia Sprint e os pontos atribuídos a ela
             pontosPadrao = {
                 1: 3,
@@ -447,12 +412,12 @@ class CtrlGP:
         else:
             raise ValueError('Não existia corrida Sprint antes de 2021')
         
-        if self.limiteCorrida.marcaPontos.get():    #Se a corrida foi completa, todos os pilotos recebem 100% dos pontos
+        if Sprint.concluida:    #Se a corrida foi completa, todos os pilotos recebem 100% dos pontos
             multiplicador = 1
         else:   #Se não, apenas 50% dos pontos são atribuidos
             multiplicador = 0.5
 
-        for resultado in self.GP.Corrida.resultados:
+        for resultado in Sprint.resultados:
             if resultado.posicao in pontosPadrao.keys():
                 pontos = pontosPadrao[resultado.posicao] * multiplicador
 
@@ -474,7 +439,7 @@ class CtrlGP:
             10: 1
         }
 
-        if self.limiteCorrida.marcaPontos.get():    #Se a corrida foi completa, todos os pilotos recebem 100% dos pontos
+        if Corrida.concluida:    #Se a corrida foi completa, todos os pilotos recebem 100% dos pontos
             multiplicador = 1
         else:   #Se não, apenas 50% dos pontos são atribuidos
             multiplicador = 0.5

@@ -189,10 +189,11 @@ class Resultado:
         return ret
     
 class Corrida:
-    def __init__(self, horaLargada, nVoltas, resultados):
+    def __init__(self, horaLargada, nVoltas, resultados, concluida):
         self.__horaLargada = horaLargada
         self.__nVoltas = nVoltas
         self.__resultados = resultados
+        self.__concluida = concluida
     
     @property
     def horaLargada(self):
@@ -205,6 +206,10 @@ class Corrida:
     @property
     def resultados(self):
         return self.__resultados
+    
+    @property
+    def concluida(self):
+        return self.__concluida
     
     @resultados.setter
     def resultados(self, resultados):

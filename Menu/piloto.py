@@ -160,3 +160,12 @@ class CtrlPiloto:
         if len(self.listaPilotos) != 0:
             with open("Cadastros/pilotos.pickle", "wb") as f:
                 pickle.dump(self.listaPilotos, f)
+
+    def getNomesPilotos(self):
+        nomes = []
+
+        for piloto in self.listaPilotos:
+            str = f"{piloto.numero} - {piloto.nome}"
+            nomes.append(str)
+
+        return nomes
