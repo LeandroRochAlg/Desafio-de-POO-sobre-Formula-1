@@ -252,6 +252,35 @@ class LimiteCadastraCorrida(tk.Toplevel):
 
     def mostraJanela(self, titulo, msg):
         messagebox.showinfo(titulo, msg)
+
+class LimiteConsultaGP(tk.Toplevel):
+    def __init__(self, controle):
+        tk.Toplevel.__init__(self)
+        self.geometry('600x600')
+        self.title("Buscar GP")
+        self.controle = controle
+
+        self.frameGP = tk.Frame(self)
+        self.frameInfo = tk.Frame(self)
+
+        self.frameGP.pack()
+        self.frameInfo.pack()
+
+        self.labelGP = tk.Label(self.frameGP, text="Info do GP: ")
+        self.labelGP.pack(side="left")
+        self.inputGP = tk.Entry(self.frameGP, width=30)
+        self.inputGP.pack(side="left")
+
+        self.infoGP = tk.Text(self.frameInfo, width=40, height=30, wrap='word')
+        self.infoGP.pack(side="left")
+
+        # Botões
+        self.buttonSubmit = tk.Button(self.frameGP, text="Enter", font=('negrito', 9))
+        self.buttonSubmit.pack(side="left")
+        self.buttonSubmit.bind("<Button>", controle.enterHandler)
+
+    def mostraJanela(self, titulo, msg):
+        messagebox.showinfo(titulo, msg)
     
 class CtrlGP:
     def __init__(self, controlePrincipal):
@@ -324,7 +353,7 @@ class CtrlGP:
         self.limiteGP.mostraJanela('Sucesso', 'GP cadastrado com sucesso')
 
     def consultarGP(self):
-        pass
+        self.limiteConsulta = LimiteConsultaGP(self)
 
     def cadastrarPiloto(self, event):
         Piloto = None
@@ -463,3 +492,23 @@ class CtrlGP:
         if len(self.listaGPs) != 0:
             with open("Cadastros/GPs.pickle", "wb") as f:
                 pickle.dump(self.listaGPs, f)
+
+    def cancelaBuscaHandler(self, event):
+        self.limiteConsulta.destroy()
+
+    def enterHandler(self, event):
+        busca = self.limiteConsulta.inputGP.get()
+        resultado = ''
+        encontrado = False
+
+        for gp in self.listaGPs:
+            if gp.nome == busca or gp.pista.nome == busca or gp.pista.pais == busca or gp.pista.cidade == busca or gp.dataInicio.strftime('%d/%m/%Y') == busca:
+                resultado += str(gp) + '\n\n'
+                encontrado = True
+        
+        if encontrado:
+            self.limiteConsulta.infoGP.delete('1.0', 'end')
+            self.limiteConsulta.infoGP.insert('end', resultado)
+        else:
+            self.limiteConsulta.infoGP.delete('1.0', 'end')
+            self.limiteConsulta.infoGP.insert('end', 'GP não encontrado')
