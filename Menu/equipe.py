@@ -105,7 +105,7 @@ class LimiteAlteraEquipe(tk.Toplevel):
         self.title("Selecione a equipe")
         self.controle = controle
 
-        self.equipeAlterada = 0 #variável de controle para evitar repetição de widgets
+        self.equipeAlterada = False #variável de controle para evitar repetição de widgets
 
         self.frameTexto = tk.Frame(self)
         self.frameEquipe = tk.Frame(self)
@@ -123,10 +123,10 @@ class LimiteAlteraEquipe(tk.Toplevel):
         self.comboEquipe.pack(side="left")
 
     def alteraEquipe(self, event):
-        if self.equipeAlterada == 1:
+        if self.equipeAlterada:
             return
 
-        self.equipeAlterada = 1
+        self.equipeAlterada = True
 
         self.frameNome = tk.Frame(self)
         self.framePais = tk.Frame(self)
