@@ -101,32 +101,32 @@ class LimiteMostraEquipes():
 class LimiteAlteraEquipe(tk.Toplevel):
     def __init__(self, controle):
         tk.Toplevel.__init__(self)
-        self.geometry('300x100')
+        self.geometry('300x400')
         self.title("Selecione a equipe")
         self.controle = controle
 
+        self.equipeAlterada = 0 #variável de controle para evitar repetição de widgets
+
+        self.frameTexto = tk.Frame(self)
         self.frameEquipe = tk.Frame(self)
         self.frameButton = tk.Frame(self)
 
+        self.frameTexto.pack()
         self.frameEquipe.pack()
         self.frameButton.pack()
 
+        self.label = tk.Label(self.frameTexto, text="Selecione a equipe a ser editada")
+        self.label.pack()
+
         self.comboEquipe = ttk.Combobox(self.frameEquipe, width=17, values=self.controle.getNomesEquipes())
+        self.comboEquipe.bind("<<ComboboxSelected>>", self.alteraEquipe)
         self.comboEquipe.pack(side="left")
 
-        # Botões
-        self.buttonSubmit = tk.Button(self.frameButton, text="Enter", font=('negrito', 9))
-        self.buttonSubmit.pack(side="left")
-        self.buttonSubmit.bind("<Button>", self.alteraEquipe)
-
-        self.buttonFecha = tk.Button(self.frameButton, text="Cancelar", font=('negrito', 9))
-        self.buttonFecha.pack(side="left")
-        self.buttonFecha.bind("<Button>", self.controle.fechaHandler)
-
     def alteraEquipe(self, event):
-        tk.Toplevel.__init__(self)
-        self.geometry('300x100')
-        self.title("Alterar equipe")
+        if self.equipeAlterada == 1:
+            return
+
+        self.equipeAlterada = 1
 
         self.frameNome = tk.Frame(self)
         self.framePais = tk.Frame(self)
@@ -282,10 +282,15 @@ class CtrlEquipe:
                     # Verifica se os campos foram preenchidos
                     if nome != '':
                         equipe.nome = nome
-                    if pais != '':
+                    elif pais != '':
                         equipe.pais = pais
-                    if chefeEquipe != '':
+                    elif chefeEquipe != '':
                         equipe.chefeEquipe = chefeEquipe
+                    else:
+                        raise ValueError('Preencha pelo menos um campo')
+                    
+                    self.limiteAltera.mostraJanela('Sucesso', 'Equipe alterada com sucesso')
+                    self.limiteAltera.destroy()
                 except ValueError as error:
                     self.limiteAltera.mostraJanela('Erro', error)
                     return
