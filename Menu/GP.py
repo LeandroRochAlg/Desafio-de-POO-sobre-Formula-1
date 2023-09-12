@@ -377,7 +377,11 @@ class CtrlGP:
         elif self.limiteCorrida.marcaAbandonou.get():
             posicao = 1000
         else:
-            posicao = int(self.limiteCorrida.inputPosicao.get())
+            try:
+                posicao = int(self.limiteCorrida.inputPosicao.get())
+            except ValueError:
+                self.limiteCorrida.mostraJanela('Erro', 'Posição inválida')
+                return
 
         try:
             Resultado = model.Resultado(Piloto, posicao, self.limiteCorrida.marcaVoltaRapida.get())
@@ -397,7 +401,7 @@ class CtrlGP:
         self.limiteCorrida.marcaVoltaRapida.set(0)
 
     def concluiCorridaHandler(self, event):
-        hora = f"{self.limiteCorrida.escolhaHora.get()}:{self.limiteCorrida.escolhaMes.get()}"  #Concatena a hora em uma string
+        hora = f"{self.limiteCorrida.escolhaHora.get()}:{self.limiteCorrida.escolhaMinuto.get()}"  #Concatena a hora em uma string
         voltas = int(self.limiteCorrida.inputVoltas.get())
 
         for piloto in self.ctrlPrincipal.ctrlPiloto.listaPilotos:
