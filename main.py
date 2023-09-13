@@ -5,7 +5,7 @@ class LimitePrincipal():
     def __init__(self, root, controle):
         self.controle = controle
         self.root = root
-        self.root.geometry('350x300')
+        self.root.geometry('400x300')
         self.root.title("Fórmula 1")
     
         self.menubar = tk.Menu(self.root)   #Cria a barra de menus
@@ -17,25 +17,35 @@ class LimitePrincipal():
         self.GpMenu = tk.Menu(self.menubar)
         self.tabelaMenu = tk.Menu(self.menubar)
         self.salvaMenu = tk.Menu(self.menubar)
+        self.extraMenu = tk.Menu(self.menubar)
 
         #Adiciona os botões dos menus
+        #Equipe
         self.equipeMenu.add_command(label="Cadastrar", command=self.controle.cadastrarEquipe)
         self.equipeMenu.add_command(label="Listar", command=self.controle.listarEquipes)
         self.equipeMenu.add_command(label="Alterar equipe", command=self.controle.alterarEquipe)
 
+        #Piloto
         self.pilotoMenu.add_command(label="Cadastrar", command=self.controle.cadastrarPiloto)
         self.pilotoMenu.add_command(label="Listar", command=self.controle.listarPilotos)
 
+        #Pista
         self.pistaMenu.add_command(label="Cadastrar", command=self.controle.cadastrarPista)
         self.pistaMenu.add_command(label="Listar", command=self.controle.listarPistas)
 
+        #Grande Prêmio
         self.GpMenu.add_command(label="Cadastrar", command=self.controle.cadastrarGP)
         self.GpMenu.add_command(label="Buscar", command=self.controle.consultarGP)
 
+        #Tabelas
         self.tabelaMenu.add_command(label="Pilotos", command=self.controle.exibirTabelaPilotos)
         self.tabelaMenu.add_command(label="Construtores", command=self.controle.exibirTabelaConstrutores)
 
+        #Sair
         self.salvaMenu.add_command(label='Salvar e sair', command=self.controle.salva)
+
+        #Extra
+        self.extraMenu.add_command(label="Resetar pontos", command=self.controle.resetarPontos)
 
         #Adiciona os menus a barra de menus
         self.menubar.add_cascade(label="Equipe", menu=self.equipeMenu)
@@ -44,6 +54,7 @@ class LimitePrincipal():
         self.menubar.add_cascade(label="Grande Prêmio", menu=self.GpMenu)
         self.menubar.add_cascade(label="Tabelas", menu=self.tabelaMenu)
         self.menubar.add_cascade(label="Sair", menu=self.salvaMenu)
+        self.menubar.add_cascade(label="Extra", menu=self.extraMenu)
 
         #Adiciona a barra de menus a janela principal
         self.root.config(menu=self.menubar)
@@ -102,6 +113,13 @@ class ControlePrincipal():
         self.ctrlPista.salvaPistas()
         self.ctrlGP.salvaGPs()
         self.root.destroy()
+
+    def resetarPontos(self):
+        for equipe in self.ctrlEquipe.listaEquipes:
+            equipe.pontos = 0
+
+        for piloto in self.ctrlPiloto.listaPilotos:
+            piloto.pontos = 0
 
 if __name__ == '__main__':
     c = ControlePrincipal()

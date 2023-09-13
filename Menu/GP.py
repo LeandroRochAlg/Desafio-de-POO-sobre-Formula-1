@@ -17,11 +17,13 @@ class LimiteCriaGP(tk.Toplevel):
         self.framePista = tk.Frame(self)            #Frame para a pista
         self.frameData = tk.Frame(self)             #Frame para a data
         self.frameButton = tk.Frame(self)           #Frame para os botões
+        self.frameButton2 = tk.Frame(self)          #Frame para de conclusão e cancelamento
 
         self.frameGP.pack()
         self.framePista.pack()
         self.frameData.pack()
         self.frameButton.pack()
+        self.frameButton2.pack()
 
         self.labelGP = tk.Label(self.frameGP, text="Nome do GP: ")
         self.labelGP.pack(side="left")
@@ -60,19 +62,19 @@ class LimiteCriaGP(tk.Toplevel):
         self.comboAno.pack(side="left")
 
         # Botões
-        self.buttonSprint = tk.Button(self.frameButton, text="Cadastrar Sprint", font=('negrito', 9))
+        self.buttonSprint = tk.Button(self.frameButton, text="Criar GP e Cadastrar Sprint", font=('negrito', 9))
         self.buttonSprint.pack(side="left")
         self.buttonSprint.bind("<Button>", controle.cadastrarSprint)
 
-        self.buttonCorrida = tk.Button(self.frameButton, text="Cadastrar Corrida", font=('negrito', 9))
+        self.buttonCorrida = tk.Button(self.frameButton, text="Criar GP e Cadastrar Corrida", font=('negrito', 9))
         self.buttonCorrida.pack(side="left")
         self.buttonCorrida.bind("<Button>", controle.cadastrarCorrida)
 
-        self.buttonCancela = tk.Button(self.frameButton, text="Cancelar", font=('negrito', 9))
+        self.buttonCancela = tk.Button(self.frameButton2, text="Cancelar", font=('negrito', 9))
         self.buttonCancela.pack(side="left")
         self.buttonCancela.bind("<Button>", controle.cancelaHandler)
 
-        self.buttonFecha = tk.Button(self.frameButton, text="Concluído", font=('negrito', 9))
+        self.buttonFecha = tk.Button(self.frameButton2, text="Concluído", font=('negrito', 9))
         self.buttonFecha.pack(side="left")
         self.buttonFecha.bind("<Button>", controle.concluiHandler)
 
@@ -105,7 +107,7 @@ class LimiteCadastraCorrida(tk.Toplevel):
         self.frameButton.pack()
 
         #Cadastro de resultado de pilotos
-        self.labelPiloto = tk.Label(self.framePiloto, text=f"Selecione o {self.pos} colocado: ")
+        self.labelPiloto = tk.Label(self.framePiloto, text=f"Selecione o {self.pos}º colocado: ")
         self.labelPiloto.pack(side="left")
         self.comboPiloto = ttk.Combobox(self.framePiloto, width=30, values=pilotos)
         self.comboPiloto.pack(side="left")
@@ -184,11 +186,11 @@ class LimiteCadastraCorrida(tk.Toplevel):
 
     def aumentaPosicao(self):
         self.pos += 1
-        self.labelPiloto['text'] = f"Selecione o {self.pos} colocado: "
+        self.labelPiloto['text'] = f"Selecione o {self.pos}º colocado: "
 
     def diminuiPosicao(self):
         self.pos -= 1
-        self.labelPiloto['text'] = f"Selecione o {self.pos} colocado: "
+        self.labelPiloto['text'] = f"Selecione o {self.pos}º colocado: "
 
 class LimiteConsultaGP(tk.Toplevel):
     def __init__(self, controle):
@@ -199,22 +201,28 @@ class LimiteConsultaGP(tk.Toplevel):
 
         self.frameGP = tk.Frame(self)
         self.frameInfo = tk.Frame(self)
+        self.frameButton = tk.Frame(self)
 
         self.frameGP.pack()
         self.frameInfo.pack()
+        self.frameButton.pack()
 
         self.labelGP = tk.Label(self.frameGP, text="Info do GP: ")
         self.labelGP.pack(side="left")
         self.inputGP = tk.Entry(self.frameGP, width=30)
         self.inputGP.pack(side="left")
 
-        self.infoGP = tk.Text(self.frameInfo, width=40, height=30, wrap='word')
+        self.infoGP = tk.Text(self.frameInfo, width=60, height=30, wrap='word')
         self.infoGP.pack(side="left")
 
         # Botões
         self.buttonSubmit = tk.Button(self.frameGP, text="Enter", font=('negrito', 9))
         self.buttonSubmit.pack(side="left")
         self.buttonSubmit.bind("<Button>", controle.enterHandler)
+
+        self.buttonCancela = tk.Button(self.frameButton, text="Sair", font=('negrito', 9))
+        self.buttonCancela.pack(side="left")
+        self.buttonCancela.bind("<Button>", controle.fechaConsultaHandler)
 
     def mostraJanela(self, titulo, msg):
         messagebox.showinfo(titulo, msg)
@@ -232,6 +240,7 @@ class CtrlGP:
 
     def cadastrarGP(self):
         pistas = []
+        self.GP = None
 
         for pista in self.ctrlPrincipal.ctrlPista.listaPistas:
             pistas.append(pista.nome)
@@ -241,9 +250,14 @@ class CtrlGP:
         self.limiteGP = LimiteCriaGP(self, pistas)
 
     def cadastrarSprint(self, event):
+        #Inicia os elementos necessários
+        self.resultadosCorrida = []
         self.GP = self.cadastra()
 
         if self.GP == None:
+            return
+        elif self.GP.Sprint != None:
+            self.limiteGP.mostraJanela('Erro', 'Esse GP já possui uma sprint cadastrada')
             return
         
         self.tipoCorrida = 'Sprint'
@@ -251,9 +265,14 @@ class CtrlGP:
         self.limiteCorrida = LimiteCadastraCorrida(self, self.GP.nome, True, self.ctrlPrincipal.ctrlPiloto.getNomesPilotos())
 
     def cadastrarCorrida(self, event):
+        #Inicia os elementos necessários
+        self.resultadosCorrida = []
         self.GP = self.cadastra()
 
         if self.GP == None:
+            return
+        elif self.GP.Corrida != None:
+            self.limiteGP.mostraJanela('Erro', 'Esse GP já possui uma corrida cadastrada')
             return
         
         self.tipoCorrida = 'Corrida'
@@ -270,13 +289,15 @@ class CtrlGP:
                 return gp
         
         #Se não houver, cria um novo
+        Pista = None
+
         for pst in self.ctrlPrincipal.ctrlPista.listaPistas:
             if pst.nome == pista:
-                pista = pst
+                Pista = pst
                 break
                 
         try:
-            GP = model.GP(nome, pista, data)
+            GP = model.GP(nome, Pista, data)
             self.listaGPs.append(GP)
 
             #ordena os GPs por data
@@ -287,11 +308,19 @@ class CtrlGP:
             self.limiteGP.mostraJanela('Erro', str(error))
 
     def cancelaHandler(self, event):
+        self.listaGPs.pop()
+        self.limiteGP.mostraJanela('Sucesso', 'GP removido com sucesso')
         self.limiteGP.destroy()
 
     def concluiHandler(self, event):
-        self.listaGPs.append(self.GP)
-        self.limiteGP.mostraJanela('Sucesso', 'GP cadastrado com sucesso')
+        self.GP = self.cadastra()
+        if self.GP in self.listaGPs:
+            self.limiteGP.mostraJanela('Sucesso', 'GP cadastrado com sucesso')
+        else:
+            self.listaGPs.append(self.GP)
+            self.limiteGP.mostraJanela('Sucesso', 'GP cadastrado com sucesso')
+
+        self.limiteGP.destroy()
 
     def consultarGP(self):
         self.limiteConsulta = LimiteConsultaGP(self)
@@ -341,7 +370,18 @@ class CtrlGP:
         #Finalizações
         self.resultadosCorrida.append(Resultado)
         self.limiteCorrida.mostraJanela('Sucesso', 'Resultado do piloto cadastrado com sucesso')
-        self.limiteCorrida.textPilotos.insert('end', str(Resultado) + '\n')
+
+        str = f'{Resultado.posicao}º - {Resultado.Piloto.nome} - {Resultado.Piloto.numero}'
+        if Resultado.voltaRapida:
+            str += ' - Volta mais rápida'
+        if Resultado.posicao == 1000:
+            str += ' - Abandonou'
+        elif Resultado.posicao == 2000:
+            str += ' - Não largou'
+        elif Resultado.posicao == 3000:
+            str += ' - Desclassificado'
+        self.limiteCorrida.textPilotos.insert('end', str + '\n')
+
         self.limiteCorrida.aumentaPosicao()
 
         #Limpa os campos
@@ -350,7 +390,20 @@ class CtrlGP:
         self.limiteCorrida.marcaDesclassificado.set(0)
         self.limiteCorrida.marcaVoltaRapida.set(0)
 
-        self.limiteCorrida.comboPiloto['values'].remove(escolha)
+        #Remove o piloto do combobox
+        self.limiteCorrida.comboPiloto['values'] = self.getPilotos()
+
+    def getPilotos(self):
+        listaPilotos = self.ctrlPrincipal.ctrlPiloto.getNomesPilotos()
+
+        #Remove os pilotos já registrados da lista do combobox
+        for resultado in self.resultadosCorrida:
+            for piloto in listaPilotos:
+                if piloto == f"{resultado.Piloto.numero} - {resultado.Piloto.nome}":
+                    listaPilotos.remove(piloto)
+                    break
+
+        return listaPilotos
 
     def removePiloto(self, event):
         if len(self.resultadosCorrida) == 0:
@@ -362,15 +415,33 @@ class CtrlGP:
         self.limiteCorrida.diminuiPosicao()
 
         for resultado in self.resultadosCorrida:
-            self.limiteCorrida.textPilotos.insert('end', str(resultado) + '\n')
+            str = f'{resultado.posicao}º - {resultado.Piloto.nome} - {resultado.Piloto.numero}'
+            if resultado.voltaRapida:
+                str += ' - Volta mais rápida'
+            if resultado.posicao == 1000:
+                str += ' - Abandonou'
+            elif resultado.posicao == 2000:
+                str += ' - Não largou'
+            elif resultado.posicao == 3000:
+                str += ' - Desclassificado'
+            self.limiteCorrida.textPilotos.insert('end', str + '\n')
+
+        #Adiciona o piloto removido ao combobox
+        self.limiteCorrida.comboPiloto['values'] = self.getPilotos()
 
     def concluiCorridaHandler(self, event):
         hora = f"{self.limiteCorrida.escolhaHora.get()}:{self.limiteCorrida.escolhaMinuto.get()}"  #Concatena a hora em uma string
         voltas = int(self.limiteCorrida.inputVoltas.get())
 
+        #Insere todos os pilotos não registrados como não largaram
         for piloto in self.ctrlPrincipal.ctrlPiloto.listaPilotos:
-            if piloto not in self.resultadosCorrida:
-                Resultado = model.Resultado(piloto, 2000, False)    #Os pilotos não registrados não largaram
+            registrado = False
+            for resultado in self.resultadosCorrida:
+                if piloto == resultado.Piloto:
+                    registrado = True
+                    break
+            if not registrado:
+                Resultado = model.Resultado(piloto, 2000, False)
                 self.resultadosCorrida.append(Resultado)
 
         try:
@@ -386,6 +457,7 @@ class CtrlGP:
                 raise ValueError('Desculpe, ocorreu um erro inesperado')
             
             self.limiteCorrida.destroy()
+            self.resultadosCorrida = [] #Limpa a lista de resultados
         except ValueError as error:
             self.limiteCorrida.mostraJanela('Erro', str(error))
             return
@@ -471,8 +543,8 @@ class CtrlGP:
         encontrado = False
 
         for gp in self.listaGPs:
-            if gp.nome == busca or gp.pista.nome == busca or gp.pista.pais == busca or gp.pista.cidade == busca or gp.dataInicio.strftime('%d/%m/%Y') == busca:
-                resultado += str(gp) + '\n\n'
+            if gp.nome == busca or gp.Pista.nome == busca or gp.Pista.pais == busca or gp.Pista.cidade == busca or gp.dataInicio.strftime('%d/%m/%Y') == busca:
+                resultado += str(gp) + '\n\n' + ('=' * 50) + '\n\n'
                 encontrado = True
         
         if encontrado:
@@ -481,3 +553,6 @@ class CtrlGP:
         else:
             self.limiteConsulta.infoGP.delete('1.0', 'end')
             self.limiteConsulta.infoGP.insert('end', 'GP não encontrado')
+
+    def fechaConsultaHandler(self, event):
+        self.limiteConsulta.destroy()

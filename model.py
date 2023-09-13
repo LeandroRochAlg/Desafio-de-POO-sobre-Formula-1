@@ -129,7 +129,7 @@ class Pista:
     def tamanho(self, tamanho):
         if tamanho <= 3000 and self.__pais != 'Mônaco':  #Mônaco é exceção pois tem menos de 3000 m
             raise ValueError("O tamanho da pista não pode ser menor que 3000 m")
-        elif tamanho >= 7000 and self.__nome != 'Spa-Francorchamps':    #Spa é exceção pois tem 7004 m
+        elif tamanho >= 7000 and self.__nome != 'Circuit de Spa-Francorchamps':    #Spa é exceção pois tem 7004 m
             raise ValueError("O tamanho da pista não pode ser maior que 7000 m")
         else:
             self.__tamanho = tamanho
@@ -162,8 +162,8 @@ class Resultado:
     def posicao(self, posicao):
         if posicao < 0:
             raise ValueError("A posição não pode ser negativa")
-        elif posicao > 30 and (posicao != 1000 and posicao != 2000 and posicao != 3000):
-            raise ValueError("A posição não pode ser maior que 30")
+        elif posicao > 50 and (posicao != 1000 and posicao != 2000 and posicao != 3000):
+            raise ValueError("A posição não pode ser maior que 50")
         else:
             self.__posicao = posicao
     
@@ -222,13 +222,9 @@ class Corrida:
         ret = f"Horário de largada: {self.__horaLargada}\nResultados:"
 
         #Ordena os resultados pela posição
-        for i in range(len(self.__resultados)):
-            for j in range(len(self.__resultados)):
-                if self.__resultados[i].posicao < self.__resultados[j].posicao:
-                    aux = self.__resultados[i]
-                    self.__resultados[i] = self.__resultados[j]
-                    self.__resultados[j] = aux
+        self.__resultados.sort(key=lambda x: x.posicao)
 
+        for i in range(len(self.__resultados)):
             ret += f"\n{i+1}º - {self.__resultados[i]}"
 
         return ret
@@ -236,7 +232,7 @@ class Corrida:
 class GP:
     def __init__(self, nome, Pista, dataInicio, Corrida = None, Sprint = None):
         self.nome = nome
-        self.__Pista = Pista
+        self.Pista = Pista
         self.dataInicio = dataInicio
         self.Corrida = Corrida
         self.Sprint = Sprint
@@ -255,6 +251,13 @@ class GP:
     @property
     def Pista(self):
         return self.__Pista
+    
+    @Pista.setter
+    def Pista(self, Pista):
+        if Pista == None:
+            raise ValueError("A pista não pode ser vazia")
+        else:
+            self.__Pista = Pista
     
     @property
     def dataInicio(self):
@@ -284,11 +287,11 @@ class GP:
         ret = f"Nome: {self.__nome}\nPista: {self.__Pista.nome}\nData de início: {self.__dataInicio.strftime('%d/%m/%Y')}\n"
 
         if self.__Sprint != None:   #Se tiver sprint, adiciona no retorno
-            ret += f"\nSPRINT"
+            ret += f"\nSPRINT\n"
             ret += f"{self.__Sprint}"   #Chama o método __str__ da classe Corrida
 
         if self.__Corrida != None:
-            ret += f"\nCORRIDA"
+            ret += f"\nCORRIDA\n"
             ret += f"{self.__Corrida}"
         else:
             ret += "\nCorrida ainda não realizada"

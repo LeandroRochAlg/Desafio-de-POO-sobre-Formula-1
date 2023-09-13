@@ -26,7 +26,7 @@ class LimiteCadastraPista(tk.Toplevel):
         self.labelNome = tk.Label(self.frameNome, text="Nome: ")
         self.labelPais = tk.Label(self.framePais, text="País: ")
         self.labelCidade = tk.Label(self.frameCidade, text="Cidade: ")
-        self.labelExtensao = tk.Label(self.frameExtensao, text="Extensão: ")
+        self.labelExtensao = tk.Label(self.frameExtensao, text="Extensão em metros: ")
 
         self.labelNome.pack(side="left")
         self.labelPais.pack(side="left")
