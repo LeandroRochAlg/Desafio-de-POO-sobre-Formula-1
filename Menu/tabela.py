@@ -121,7 +121,7 @@ class LimiteTabelaConstrutores(tk.Toplevel):
         self.tabela = ttk.Treeview(self.frameTabela, columns=('pos', 'nome', 'pais', 'pontos', 'vitorias', 'segundos', 'terceiros', 'voltasRapidas', 'sprints'), show='headings')
         self.tabela.column('pos', minwidth=0, width=30)
         self.tabela.column('nome', minwidth=0, width=100)
-        self.tabela.column('pais', minwidth=0, width=100)
+        self.tabela.column('pais', minwidth=0, width=150)
         self.tabela.column('pontos', minwidth=0, width=50)
         self.tabela.column('vitorias', minwidth=0, width=50)
         self.tabela.column('segundos', minwidth=0, width=50)
@@ -145,6 +145,10 @@ class LimiteTabelaConstrutores(tk.Toplevel):
         for i in range(len(listaConstrutores)):
             self.tabela.insert('', 'end', values=(i+1, listaConstrutores[i].Piloto.nome, listaConstrutores[i].Piloto.pais, listaConstrutores[i].Piloto.pontos, listaConstrutores[i].vitorias, listaConstrutores[i].segundos, listaConstrutores[i].terceiros, listaConstrutores[i].voltasRapidas, listaConstrutores[i].sprints))
 
+        #Botão
+        self.buttonFecha = tk.Button(self.frameButton, text="Concluído", font=('negrito', 9))
+        self.buttonFecha.pack(side="left")
+        self.buttonFecha.bind("<Button>", controle.fechaHandler)
 class CtrlTabela:
     def __init__(self, controlePrincipal):
         self.ctrlPrincipal = controlePrincipal
