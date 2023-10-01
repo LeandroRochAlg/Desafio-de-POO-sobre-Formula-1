@@ -3,9 +3,9 @@ from tkinter import ttk
 from tkinter import messagebox
 import model
 
-class PilotoTabela: #Classe auxiliar para a tabela de pilotos
-    def __init__(self, Piloto):
-        self.__Piloto = Piloto
+class CompetidorTabela: #Classe auxiliar para a tabela de pilotos
+    def __init__(self, Competidor):
+        self.__Competidor = Competidor
         self.vitorias = 0
         self.segundos = 0
         self.terceiros = 0
@@ -13,8 +13,8 @@ class PilotoTabela: #Classe auxiliar para a tabela de pilotos
         self.sprints = 0
 
     @property
-    def Piloto(self):
-        return self.__Piloto
+    def Competidor(self):
+        return self.__Competidor
     
     @property
     def vitorias(self):
@@ -97,7 +97,7 @@ class LimiteTabelaPilotos(tk.Toplevel):
 
         #Preenche a tabela
         for i in range(len(listaPilotos)):
-            self.tabela.insert('', 'end', values=(i+1, listaPilotos[i].Piloto.nome, listaPilotos[i].Piloto.pais, listaPilotos[i].Piloto.Equipe.nome, listaPilotos[i].Piloto.pontos, listaPilotos[i].vitorias, listaPilotos[i].segundos, listaPilotos[i].terceiros, listaPilotos[i].voltasRapidas, listaPilotos[i].sprints))
+            self.tabela.insert('', 'end', values=(i+1, listaPilotos[i].Competidor.nome, listaPilotos[i].Competidor.pais, listaPilotos[i].Competidor.Equipe.nome, listaPilotos[i].Competidor.pontos, listaPilotos[i].vitorias, listaPilotos[i].segundos, listaPilotos[i].terceiros, listaPilotos[i].voltasRapidas, listaPilotos[i].sprints))
 
         #Botão
         self.buttonFecha = tk.Button(self.frameButton, text="Concluído", font=('negrito', 9))
@@ -143,7 +143,7 @@ class LimiteTabelaConstrutores(tk.Toplevel):
 
         #Preenche a tabela
         for i in range(len(listaConstrutores)):
-            self.tabela.insert('', 'end', values=(i+1, listaConstrutores[i].Piloto.nome, listaConstrutores[i].Piloto.pais, listaConstrutores[i].Piloto.pontos, listaConstrutores[i].vitorias, listaConstrutores[i].segundos, listaConstrutores[i].terceiros, listaConstrutores[i].voltasRapidas, listaConstrutores[i].sprints))
+            self.tabela.insert('', 'end', values=(i+1, listaConstrutores[i].Competidor.nome, listaConstrutores[i].Competidor.pais, listaConstrutores[i].Competidor.pontos, listaConstrutores[i].vitorias, listaConstrutores[i].segundos, listaConstrutores[i].terceiros, listaConstrutores[i].voltasRapidas, listaConstrutores[i].sprints))
 
         #Botão
         self.buttonFecha = tk.Button(self.frameButton, text="Concluído", font=('negrito', 9))
@@ -160,47 +160,47 @@ class CtrlTabela:
             messagebox.showinfo(title="Alerta", message="Não há pilotos cadastrados")
             return
 
-        #Cria uma lista de objetos PilotoTabela
+        #Cria uma lista de objetos CompetidorTabela
         listaPilotosTabela = []
         for piloto in listaPilotos:
-            listaPilotosTabela.append(PilotoTabela(piloto))
+            listaPilotosTabela.append(CompetidorTabela(piloto))
 
-        #Preenche a lista de objetos PilotoTabela com as informações de cada piloto
+        #Preenche a lista de objetos CompetidorTabela com as informações de cada piloto
         for gp in self.ctrlPrincipal.ctrlGP.getListaGPs():
             if gp.Corrida != None:
                 for resultado in gp.Corrida.resultados:
                     if resultado.posicao == 1:
                         for piloto in listaPilotosTabela:
-                            if piloto.Piloto.numero == resultado.Piloto.numero:
+                            if piloto.Competidor.numero == resultado.Piloto.numero:
                                 piloto.vitorias += 1
                     elif resultado.posicao == 2:
                         for piloto in listaPilotosTabela:
-                            if piloto.Piloto.numero == resultado.Piloto.numero:
+                            if piloto.Competidor.numero == resultado.Piloto.numero:
                                 piloto.segundos += 1
                     elif resultado.posicao == 3:
                         for piloto in listaPilotosTabela:
-                            if piloto.Piloto.numero == resultado.Piloto.numero:
+                            if piloto.Competidor.numero == resultado.Piloto.numero:
                                 piloto.terceiros += 1
 
                     if resultado.voltaRapida:
                         for piloto in listaPilotosTabela:
-                            if piloto.Piloto.numero == resultado.Piloto.numero:
+                            if piloto.Competidor.numero == resultado.Piloto.numero:
                                 piloto.voltasRapidas += 1
             if gp.Sprint != None:
                 for resultado in gp.Sprint.resultados:
                     if resultado.posicao == 1:
                         for piloto in listaPilotosTabela:
-                            if piloto.Piloto.numero == resultado.Piloto.numero:
+                            if piloto.Competidor.numero == resultado.Piloto.numero:
                                 piloto.sprints += 1
 
-        #Ordena a lista de objetos PilotoTabela
-        listaPilotosTabela.sort(key=lambda x: x.Piloto.pontos, reverse=True)
+        #Ordena a lista de objetos CompetidorTabela
+        listaPilotosTabela.sort(key=lambda x: x.Competidor.pontos, reverse=True)
 
         #Checa e ordena possíveis empates em pontos
         for i in range(len(listaPilotosTabela)):
             if i+1 < len(listaPilotosTabela):
-                if listaPilotosTabela[i].Piloto.pontos == listaPilotosTabela[i+1].Piloto.pontos:
-                    listaPilotosTabela = self.ordenaEmpatePilotos(listaPilotosTabela, i, i+1)
+                if listaPilotosTabela[i].Competidor.pontos == listaPilotosTabela[i+1].Competidor.pontos:
+                    listaPilotosTabela = self.ordenaEmpate(listaPilotosTabela, i, i+1)
 
         self.limiteTabela = LimiteTabelaPilotos(self, listaPilotosTabela)
 
@@ -211,75 +211,75 @@ class CtrlTabela:
             messagebox.showinfo(title="Alerta", message="Não há construtores cadastrados")
             return
 
-        #Cria uma lista de objetos PilotoTabela
+        #Cria uma lista de objetos CompetidorTabela
         listaConstrutoresTabela = []
         for construtor in listaConstrutores:
-            listaConstrutoresTabela.append(PilotoTabela(construtor))
+            listaConstrutoresTabela.append(CompetidorTabela(construtor))
 
-        #Preenche a lista de objetos PilotoTabela com as informações de cada construtor
+        #Preenche a lista de objetos CompetidorTabela com as informações de cada construtor
         for gp in self.ctrlPrincipal.ctrlGP.getListaGPs():
             if gp.Corrida != None:
                 for resultado in gp.Corrida.resultados:
                     if resultado.posicao == 1:
                         for construtor in listaConstrutoresTabela:
-                            if construtor.Piloto.nome == resultado.Piloto.Equipe.nome:
+                            if construtor.Competidor.nome == resultado.Piloto.Equipe.nome:
                                 construtor.vitorias += 1
                     elif resultado.posicao == 2:
                         for construtor in listaConstrutoresTabela:
-                            if construtor.Piloto.nome == resultado.Piloto.Equipe.nome:
+                            if construtor.Competidor.nome == resultado.Piloto.Equipe.nome:
                                 construtor.segundos += 1
                     elif resultado.posicao == 3:
                         for construtor in listaConstrutoresTabela:
-                            if construtor.Piloto.nome == resultado.Piloto.Equipe.nome:
+                            if construtor.Competidor.nome == resultado.Piloto.Equipe.nome:
                                 construtor.terceiros += 1
 
                     if resultado.voltaRapida:
                         for construtor in listaConstrutoresTabela:
-                            if construtor.Piloto.nome == resultado.Piloto.Equipe.nome:
+                            if construtor.Competidor.nome == resultado.Piloto.Equipe.nome:
                                 construtor.voltasRapidas += 1
             if gp.Sprint != None:
                 for resultado in gp.Sprint.resultados:
                     if resultado.posicao == 1:
                         for construtor in listaConstrutoresTabela:
-                            if construtor.Piloto.nome == resultado.Piloto.Equipe.nome:
+                            if construtor.Competidor.nome == resultado.Piloto.Equipe.nome:
                                 construtor.sprints += 1
 
-        #Ordena a lista de objetos PilotoTabela
-        listaConstrutoresTabela.sort(key=lambda x: x.Piloto.pontos, reverse=True)
+        #Ordena a lista de objetos CompetidorTabela
+        listaConstrutoresTabela.sort(key=lambda x: x.Competidor.pontos, reverse=True)
 
         #Checa e ordena possíveis empates em pontos
         for i in range(len(listaConstrutoresTabela)):
             if i+1 < len(listaConstrutoresTabela):
-                if listaConstrutoresTabela[i].Piloto.pontos == listaConstrutoresTabela[i+1].Piloto.pontos:
-                    listaConstrutoresTabela = self.ordenaEmpatePilotos(listaConstrutoresTabela, i, i+1)
+                if listaConstrutoresTabela[i].Competidor.pontos == listaConstrutoresTabela[i+1].Competidor.pontos:
+                    listaConstrutoresTabela = self.ordenaEmpate(listaConstrutoresTabela, i, i+1)
 
         self.limiteTabela = LimiteTabelaConstrutores(self, listaConstrutoresTabela)
 
-    def ordenaEmpatePilotos(self, listaPilotos, i, j):
+    def ordenaEmpate(self, lista, i, j):
         #Listas de números de resultados de cada piloto
-        resultadosPlt1 = [0 for i in range(len(listaPilotos))]
-        resultadosPlt2 = [0 for i in range(len(listaPilotos))]
+        resultadosPlt1 = [0 for i in range(len(lista))]
+        resultadosPlt2 = [0 for i in range(len(lista))]
 
         for gp in self.ctrlPrincipal.ctrlGP.getListaGPs():  #Conta os resultados de cada piloto
             if gp.Corrida != None:
                 for resultado in gp.Corrida.resultados:
-                    if resultado.Piloto == listaPilotos[i].Piloto:
+                    if resultado.Piloto == lista[i].Competidor:
                         resultadosPlt1[resultado.posicao - 1] += 1
-                    elif resultado.Piloto == listaPilotos[j].Piloto:
+                    elif resultado.Piloto == lista[j].Competidor:
                         resultadosPlt2[resultado.posicao - 1] += 1
 
         k = 0
 
         while resultadosPlt1[k] == resultadosPlt2[k]:   #Varre até encontrar a diferença entre os resultados
             if k == len(resultadosPlt1) - 1:
-                return listaPilotos
+                return lista
 
             k += 1
 
         if resultadosPlt1[k] < resultadosPlt2[k]:   #Troca os pilotos de posição caso o piloto 1 tenha o resultado pior
-            listaPilotos[i], listaPilotos[j] = listaPilotos[j], listaPilotos[i]
+            lista[i], lista[j] = lista[j], lista[i]
 
-        return listaPilotos
+        return lista
     
     def fechaHandler(self, event):
         self.limiteTabela.destroy()
