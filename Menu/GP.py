@@ -556,3 +556,6 @@ class CtrlGP:
 
     def fechaConsultaHandler(self, event):
         self.limiteConsulta.destroy()
+
+    def getListaGPs(self):
+        return self.listaGPs

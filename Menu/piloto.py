@@ -169,3 +169,6 @@ class CtrlPiloto:
             nomes.append(str)
 
         return nomes
+    
+    def getListaPilotos(self):
+        return self.listaPilotos
