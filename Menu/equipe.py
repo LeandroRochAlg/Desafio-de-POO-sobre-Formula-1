@@ -295,3 +295,6 @@ class CtrlEquipe:
                     self.limiteAltera.mostraJanela('Erro', error)
                     return
                 break
+
+    def getListaEquipes(self):
+        return self.listaEquipes
