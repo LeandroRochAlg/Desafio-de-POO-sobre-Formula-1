@@ -263,9 +263,9 @@ class CtrlTabela:
         for gp in self.ctrlPrincipal.ctrlGP.getListaGPs():  #Conta os resultados de cada piloto
             if gp.Corrida != None:
                 for resultado in gp.Corrida.resultados:
-                    if resultado.Piloto == lista[i].Competidor:
+                    if resultado.Piloto == lista[i].Competidor and (resultado.posicao != 1000 and resultado.posicao != 2000 and resultado.posicao != 3000): #Não conta resultados de não terminou, não largou e desclassificado
                         resultadosPlt1[resultado.posicao - 1] += 1
-                    elif resultado.Piloto == lista[j].Competidor:
+                    elif resultado.Piloto == lista[j].Competidor and (resultado.posicao != 1000 and resultado.posicao != 2000 and resultado.posicao != 3000):
                         resultadosPlt2[resultado.posicao - 1] += 1
 
         k = 0
