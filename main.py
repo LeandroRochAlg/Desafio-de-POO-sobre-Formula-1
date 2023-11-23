@@ -28,6 +28,7 @@ class LimitePrincipal():
         #Piloto
         self.pilotoMenu.add_command(label="Cadastrar", command=self.controle.cadastrarPiloto)
         self.pilotoMenu.add_command(label="Listar", command=self.controle.listarPilotos)
+        self.pilotoMenu.add_command(label="Alterar piloto", command=self.controle.alterarPiloto)
 
         #Pista
         self.pistaMenu.add_command(label="Cadastrar", command=self.controle.cadastrarPista)
@@ -88,6 +89,9 @@ class ControlePrincipal():
 
     def listarPilotos(self):
         self.ctrlPiloto.listarPilotos()
+
+    def alterarPiloto(self):
+        self.ctrlPiloto.alterarPiloto()
 
     def cadastrarPista(self):
         self.ctrlPista.cadastrarPista()
