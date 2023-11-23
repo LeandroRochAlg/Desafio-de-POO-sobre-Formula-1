@@ -309,3 +309,15 @@ Essas classes são responsáveis pela criação de janelas de exibição das tab
 A classe `CtrlTabela` contém métodos para exibir as tabelas de pilotos e construtores. O método `exibirTabelaPilotos` cria uma tabela de pilotos com base nas informações disponíveis, enquanto `exibirTabelaConstrutores` cria uma tabela de construtores. O método `ordenaEmpate` é utilizado para lidar com empates nas posições da tabela.
 
 Esperamos que essas informações forneçam uma compreensão clara de como o módulo `Menu/tabela.py` funciona e como ele é integrado ao seu projeto.
+
+### Cadastros
+
+Por enquanto, estão cadastrados em [`Cadastros`](/Cadastros/):
+- Todos os pilotos e equipes que participaram da temporada de 2021;
+- Cinco pistas:
+    - Bahrain;
+    - Ímola;
+    - Portimão;
+    - Barcelona;
+    - Interlagos;
+- Os 3 primeiros GPs da temporada com os resultados das corridas.
