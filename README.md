@@ -62,7 +62,7 @@ Este desafio visa explorar conceitos avançados de Programação Orientada a Obj
 
 A solução implementada para o problema segue os princípios da Programação Orientada a Objetos (POO) em Python. Utilizamos o padrão de arquitetura MVC para organizar o código, facilitando a manutenção e extensão do sistema. A persistência de objetos foi implementada usando o módulo `pickle`, garantindo que os dados sejam salvos entre diferentes execuções do programa. O uso de exceptions aprimora a robustez do sistema ao lidar com situações excepcionais.
 
-### Arquivo principal: `main.py`
+### Arquivo principal: [`main.py`](main.py)
 
 O arquivo `main.py` é responsável pela execução do sistema. Aqui, temos as classes `LimitePrincipal` e `ControlePrincipal`, representando a camada de View e Controller, respectivamente.
 
@@ -78,7 +78,7 @@ if __name__ == '__main__':
     c = ControlePrincipal()
 ```
 
-### Model do sistema: `model.py`
+### Model do sistema: [`model.py`](model.py)
 
 O arquivo `model.py` contém as classes que representam os principais objetos do sistema, como Piloto, Equipe, Pista, Resultado, Corrida e Grande Prêmio (GP). Essas classes encapsulam a lógica de negócio do sistema, oferecendo métodos para realizar operações como cadastro de resultados, consulta de informações, entre outras.
 
@@ -124,7 +124,7 @@ O arquivo `model.py` contém as classes que representam os principais objetos do
 
 Essas classes fornecem a estrutura fundamental para o gerenciamento de resultados de corridas de Fórmula 1, encapsulando dados e comportamentos relevantes para cada entidade do sistema. A utilização de herança, propriedades e métodos específicos contribui para uma implementação modular e coesa.
 
-### Controle de equipes: `Menu/equipe.py`
+### Controle de equipes: [`Menu/equipe.py`](Menu/equipe.py)
 
 No módulo `equipe.py`, é implementada a interação entre a camada de View e Controller relacionada às equipes do sistema. As classes presentes neste arquivo gerenciam o cadastro, exibição e alteração de equipes. A seguir, são descritas as principais classes e métodos desse controle:
 
@@ -169,7 +169,7 @@ Esta classe é responsável pelo controle das operações relacionadas às equip
   - `getListaEquipes()`: Retorna a lista de equipes cadastradas.
   - `getEquipe(nome)`: Retorna a instância de uma equipe com o nome fornecido.
 
-### Controle de pilotos: `Menu/piloto.py`
+### Controle de pilotos: [`Menu/piloto.py`](Menu/piloto.py)
 
 O módulo `piloto.py` implementa o controle das operações relacionadas aos pilotos no sistema de gerenciamento de resultados de corridas de Fórmula 1. Abaixo estão descritas as principais classes e métodos desse controle:
 
@@ -213,7 +213,7 @@ Responsável pelo controle das operações relacionadas aos pilotos. Gerencia o 
   - `enterAlteraHandler(event)`: Método chamado ao pressionar o botão "Enter" na interface de alteração, realiza a alteração do piloto selecionado.
   - `fechaAlteraHandler(event)`: Fecha a janela de alteração de pilotos.
 
-### Controle de pistas: `Menu/pista.py`
+### Controle de pistas: [`Menu/pista.py`](Menu/pista.py)
 
 O módulo `pista.py` implementa o controle das operações relacionadas às pistas no sistema de gerenciamento de resultados de corridas de Fórmula 1. Abaixo estão descritas as principais classes e métodos desse controle:
 
@@ -244,7 +244,7 @@ Responsável pelo controle das operações relacionadas às pistas. Gerencia o c
   - `fechaListaHandler(event)`: Fecha a janela de listagem de pistas.
   - `salvaPistas()`: Salva as pistas cadastradas em um arquivo.
 
-### Controle de GPs e suas corridas e sprints: `Menu/GP.py`
+### Controle de GPs e suas corridas e sprints: [`Menu/GP.py`](Menu/GP.py)
 
 Este módulo (`Menu/GP.py`) contém classes e métodos relacionados ao controle de Grandes Prêmios (GPs), suas corridas e sprints. Abaixo estão as principais classes e métodos fornecidos por este módulo.
 
@@ -292,7 +292,7 @@ Esta classe é o controlador principal para as operações relacionadas a GPs, c
   - `fechaConsultaHandler(event)`: Manipula o fechamento da janela de consulta.
   - `getListaGPs()`: Obtém a lista de GPs cadastrados.
 
-### Exibição de tabelas: `Menu/tabela.py`
+### Exibição de tabelas: [`Menu/tabela.py`](Menu/tabela.py)
 
 O módulo `Menu/tabela.py` é responsável pela exibição de tabelas de pilotos e construtores. Abaixo está uma breve descrição do código contido neste arquivo:
 
