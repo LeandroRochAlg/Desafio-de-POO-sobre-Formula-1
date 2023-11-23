@@ -298,3 +298,9 @@ class CtrlEquipe:
 
     def getListaEquipes(self):
         return self.listaEquipes
+    
+    def getEquipe(self, nome):
+        for equipe in self.listaEquipes:
+            if equipe.nome == nome:
+                return equipe
+        return None
